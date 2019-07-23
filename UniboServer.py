@@ -1,4 +1,5 @@
 import json
+import UniboArm
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -17,10 +18,8 @@ class MyHandler(BaseHTTPRequestHandler):
         self.wfile.write(response_json.encode('utf-8'))
         
         #ここにuniboを動かす関数を書く
-        self.hello()
+        UniboArm.Arm().move_arm()
     #仮の関数
-    def hello(self):
-        print("hello")
         
 def main():
     host = '0.0.0.0'
