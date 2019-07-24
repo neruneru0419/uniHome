@@ -23,10 +23,10 @@ class DotMatrixLED:
 
         self.moved_normal_face = [[ 0, 0, 0, 0, 0, 0, 0, 0 ],
                                   [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-                                  [ 0, 0, 0, 1, 0, 0, 1, 0 ],
-                                  [ 0, 0, 0, 1, 0, 0, 1, 0 ],
-                                  [ 0, 0, 0, 1, 0, 0, 1, 0 ],
                                   [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                                  [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                                  [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                                  [ 0, 0, 1, 0, 0, 1, 0, 0 ],
                                   [ 0, 0, 0, 0, 0, 0, 0, 0 ],
                                   [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
 
@@ -47,25 +47,67 @@ class DotMatrixLED:
                                  [ 0, 0, 1, 0, 0, 1, 0, 0 ],
                                  [ 0, 0, 1, 1, 1, 1, 0, 0 ],
                                  [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
+
+        self.parent_face = [[ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 1, 0, 0, 0, 0, 1, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 1, 1, 1, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
+
+        self.moved_parent_face = [[ 0, 1, 0, 0, 0, 0, 1, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 1, 1, 1, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
+        
+        self.gran_face = [[ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 1, 1, 0, 0, 1, 1, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 1, 1, 0, 0, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
+        
+        self.moved_gran_face = [[ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 1, 1, 0, 0, 1, 1, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+                           [ 0, 0, 0, 1, 1, 0, 0, 0 ],
+                           [ 0, 0, 1, 0, 0, 1, 0, 0 ],
+                           [ 0, 0, 0, 0, 0, 0, 0, 0 ]]
     #ダイナミック点灯をする関数
-    def select_face(self, face):
-        try:
-            while True:
-                #カソードのループ
-                for cat in range(8):
-                    GPIO.output(self.PIN_CAT[cat], False) # LOWに変更
-                    # アノードのループ
-                    for ano in range(8):
-                        #1.5秒ごとに表情を変化
+    def loop_face(self, face):
+           while True:
+            #カソードのループ
+            for cat in range(8):
+                GPIO.output(self.PIN_CAT[cat], False) # LOWに変更
+                # アノードのループ
+                for ano in range(8):
+                    #1.5秒ごとに表情を変化
+                    if face == 1:
                         if self.time_count % 1500 <= 750:
                             GPIO.output(self.PIN_ANO[ano], self.smile_face[cat][ano]) # HIGH or LOW
                         else:
                             GPIO.output(self.PIN_ANO[ano], self.moved_smile_face[cat][ano]) # HIGH or LOW
-                    time.sleep(0.0001) 
-                    for ano in range(8):
-                        GPIO.output(self.PIN_ANO[ano], False) # LOWに戻す
-                    GPIO.output(self.PIN_CAT[cat], True) # HIGHに戻す
-                self.time_count += 1
-        except:
-            print("ctrl+cが押されました")
-            GPIO.cleanup
+                    elif face == 2:
+                        if self.time_count % 1500 <= 750:
+                            GPIO.output(self.PIN_ANO[ano], self.normal_face[cat][ano]) # HIGH or LOW
+                        else:
+                            GPIO.output(self.PIN_ANO[ano], self.moved_normal_face[cat][ano]) # HIGH or LOW
+                    elif face == 3:
+                        GPIO.output(self.PIN_ANO[ano], self.parent_face[cat][ano]) # HIGH or LOW
+                    elif face == 4:
+                        GPIO.output(self.PIN_ANO[ano], self.gran_face[cat][ano]) # HIGH or LOW
+                time.sleep(0.0001) 
+                for ano in range(8):
+                    GPIO.output(self.PIN_ANO[ano], False) # LOWに戻す
+                GPIO.output(self.PIN_CAT[cat], True) # HIGHに戻す
+            self.time_count += 1
