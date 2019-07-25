@@ -1,26 +1,26 @@
 import RPi.GPIO as GPIO
 import time
-class touchSensor:
+class TouchSensor:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(14, GPIO.IN)
 
         GPIO.setup(24, GPIO.OUT)
-        right = GPIO.PWM(24, 50)
-        right.start(0)
+        self.right = GPIO.PWM(24, 50)
+        self.right.start(0)
 
         GPIO.setup(23, GPIO.OUT)
-        left = GPIO.PWM(23, 50)
-        left.start(0)
+        self.left = GPIO.PWM(23, 50)
+        self.left.start(0)
 
     def dance(self):
         for i in range(5):
-            right.ChangeDutyCycle(2.5)
-            left.ChangeDutyCycle(4.875)
+            self.right.ChangeDutyCycle(2.5)
+            self.left.ChangeDutyCycle(4.875)
             time.sleep(0.5)
 
-            right.ChangeDutyCycle(9.625)
-            left.ChangeDutyCycle(12)
+            self.right.ChangeDutyCycle(9.625)
+            self.left.ChangeDutyCycle(12)
             time.sleep(0.5)
 
     print("start")
@@ -33,11 +33,10 @@ class touchSensor:
                 j += 0.1
             else:
                 j = 0
-
             time.sleep(0.1)
-    dance()
-
-touch_dance()
+        self.dance()
+unibo_dance = TouchSensor()
+unibo_dance.touch_dance()
 print("finish")
 
 GPIO.cleanup()
