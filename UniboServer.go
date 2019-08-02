@@ -15,7 +15,7 @@ type Unibo struct {
 	Name string `json:"name"`
 }
 
-func handleDogJson(w http.ResponseWriter, r *http.Request) {
+func handleUniboJson(w http.ResponseWriter, r *http.Request) {
 	// header
 	method := r.Method
 	fmt.Println("[method] " + method)
@@ -40,7 +40,7 @@ func handleDogJson(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Printf("[request body decoded] %+v\n", unibo)
 		fmt.Fprint(w, "Recieved Post(json) request!!")
-		postAsJson()
+		//postAsJson()
 	}
 }
 
@@ -48,7 +48,7 @@ func postAsJson() {
 	// json values
 	values, err := json.Marshal(Unibo{Id: 1, Name: "UniboA"})
 
-	res, err := http.Post("http://localhost:8080/dog_json", "application/json", bytes.NewBuffer(values))
+	res, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(values))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,6 +70,6 @@ func postAsJson() {
 }
 
 func main(){
-	http.HandleFunc("/dog_json", handleDogJson)
+	http.HandleFunc("/", handleDogJson)
 	http.ListenAndServe(":8080", nil)
 }
