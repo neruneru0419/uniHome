@@ -10,10 +10,6 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-  	if port == ""{
-		log.Fatal("$PORT must be set")
-	}
     log.Println("Websocket App start.")
 
     router := gin.Default()
@@ -40,6 +36,11 @@ func main() {
         log.Printf("websocket connection close. [session: %#v]\n", s)
     })
 
+	// Listen and server on 0.0.0.0:8989
+	port := os.Getenv("PORT")
+  	if port == ""{
+		log.Fatal("$PORT must be set")
+	}
     router.Run(":"+port)
 
     fmt.Println("Websocket App End.")
