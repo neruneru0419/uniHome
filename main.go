@@ -1,59 +1,74 @@
 package main
 
 import (
-	"net/http"
-	"io"
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"os"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"strings"
 )
-func main(){
-	port := os.Getenv("PORT")
-	if port == ""{
-		log.Fatal("$PORT must be set")
-	}
-
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":"+port, nil)
+type Unibo struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
-func handler(w http.ResponseWriter, req *http.Request) {
-	if req.Method != "POST" {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	  }
-	
-	if req.Header.Get("Content-Type") != "application/json" {
-	w.WriteHeader(http.StatusBadRequest)
-	return
+func handleUniboJson(w http.ResponseWriter, r *http.Request) {
+	// header
+	method := r.Method
+	fmt.Println("[method] " + method)
+	for k, v := range r.Header {
+		fmt.Print("[header] " + k)
+		fmt.Println(": " + strings.Join(v, ","))
 	}
 
-	//To allocate slice for request body
-	length, err := strconv.Atoi(req.Header.Get("Content-Length"))
+	// POST (json)
+	if method == "POST" {
+		defer r.Body.Close()
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("[request body row] " + string(body))
+
+		var unibo Unibo
+		error := json.Unmarshal(body, &unibo)
+		if error != nil {
+			log.Fatal(error)
+		}
+		fmt.Printf("[request body decoded] %+v\n", unibo)
+		fmt.Fprint(w, string(body))
+		//postAsJson()
+	}
+}
+
+func postAsJson() {
+	// json values
+	values, err := json.Marshal(Unibo{Id: 1, Name: "UniboA"})
+
+	res, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(values))
 	if err != nil {
-	w.WriteHeader(http.StatusInternalServerError)
-	return
+		log.Fatal(err)
 	}
 
-	//Read body data to parse json
-	body := make([]byte, length)
-	length, err = req.Body.Read(body)
-	if err != nil && err != io.EOF {
-	w.WriteHeader(http.StatusInternalServerError)
-	return
+	// header
+	fmt.Printf("[status] %d\n", res.StatusCode)
+	for k, v := range res.Header {
+		fmt.Print("[header] " + k)
+		fmt.Println(": " + strings.Join(v, ","))
 	}
 
-	//parse json
-	var jsonBody map[string]interface{}
-	err = json.Unmarshal(body[:length], &jsonBody)
-	if err != nil {
-	w.WriteHeader(http.StatusInternalServerError)
-	return
+	// body
+	defer res.Body.Close()
+	body, error := ioutil.ReadAll(res.Body)
+	if error != nil {
+		log.Fatal(error)
 	}
-	fmt.Printf("%v\n", jsonBody)
+	fmt.Println("[body] " + string(body))
+}
 
-	w.WriteHeader(http.StatusOK)  
-	fmt.Fprintf(w, "Hello, %q", req.URL.Path[1:])
+func main(){
+	http.HandleFunc("/", handleUniboJson)
+	http.ListenAndServe(":8080", nil)
 }
