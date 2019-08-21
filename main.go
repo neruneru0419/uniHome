@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -69,6 +70,11 @@ func postAsJson() {
 }
 
 func main(){
+	port := os.Getenv("PORT")
+  if port == ""{
+		log.Fatal("$PORT must be set")
+	}
+
 	http.HandleFunc("/", handleUniboJson)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+port, nil)
 }
