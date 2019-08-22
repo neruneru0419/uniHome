@@ -3,17 +3,13 @@ package main
 import (
     "fmt"
     "log"
-	"net/http"
-	//"os"
+    "net/http"
+    "github.com/gin-gonic/autotls"
     "github.com/gin-gonic/gin"
     "gopkg.in/olahol/melody.v1"
 )
 
 func main() {
-	//port := os.Getenv("PORT")
-  	/*if port == ""{
-		log.Fatal("$PORT must be set")
-	}*/
     log.Println("Websocket App start.")
 
     router := gin.Default()
@@ -30,6 +26,7 @@ func main() {
 
     m.HandleMessage(func(s *melody.Session, msg []byte) {
         m.Broadcast(msg)
+        fmt.Println(msg)
     })
 
     m.HandleConnect(func(s *melody.Session) {
@@ -40,7 +37,9 @@ func main() {
         log.Printf("websocket connection close. [session: %#v]\n", s)
     })
 
-    router.Run(":8080")
+        // Listen and server on 0.0.0.0:8989
+    //router.Run(":443")
+    log.Fatal(autotls.Run(router, "neruneru.higashi.dev"))
 
     fmt.Println("Websocket App End.")
 }
