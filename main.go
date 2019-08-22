@@ -4,7 +4,6 @@ import (
     "fmt"
     "log"
 	"net/http"
-	"os"
     "github.com/gin-gonic/gin"
     "gopkg.in/olahol/melody.v1"
 )
@@ -36,12 +35,9 @@ func main() {
         log.Printf("websocket connection close. [session: %#v]\n", s)
     })
 
-	// Listen and server on 0.0.0.0:8989
-	port := os.Getenv("PORT")
-  	if port == ""{
-		log.Fatal("$PORT must be set")
-	}
-    router.Run(":"+port)
+    // Listen and server on 0.0.0.0:80
+    
+    router.Run(":80")
 
     fmt.Println("Websocket App End.")
 }
