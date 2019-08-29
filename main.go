@@ -19,6 +19,7 @@ func main() {
 	rg := router.Group("/sampleapp")
 	rg.GET("/", func(ctx *gin.Context) {
 		http.ServeFile(ctx.Writer, ctx.Request, "index.html")
+		
 	})
 
 	rg.GET("/ws", func(ctx *gin.Context) {
@@ -38,8 +39,6 @@ func main() {
 		log.Printf("websocket connection close. [session: %#v]\n", s)
 	})
 
-	// Listen and server on 0.0.0.0:8989
-	//router.Run(":443")
 	log.Fatal(autotls.Run(router, "neruneru.higashi.dev"))
 
 	fmt.Println("Websocket App End.")

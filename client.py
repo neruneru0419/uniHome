@@ -3,27 +3,38 @@ import json
 import random
 from websocket import create_connection
 from threading import Thread
-class Ws:
+#websocket通信のためのクラス
+class UniboWs:
     def __init__(self):
+
         self.ws = create_connection("wss://neruneru.higashi.dev/sampleapp/ws")
-        self.unibo_id = random.randint(1, 100000)
-        print("userid="+str(self.unibo_id))
-    def ws_send(self):
+        with open("./Unibodata.json", "r") as f
+            self.unibo_data = json.load(f)
+        #ユーザーの設定
+        unibo_user = "child"
+        self.unibo_data["user"] = unibo_user
+    #uniboからのデータ送信
+    def unibo_ws_send(self):
         while True:
-            i = input()
-            data = {"user": self.unibo_id, "message": i}
-            jsn = json.dumps(data)
-            self.ws.send(jsn)
+            #ここにjsonのFalseを変化させる処理を書きたい
+            result = json.dumps(self.unibo_data)
+            self.ws.send(result)
         ws.close()
-    def ws_recv(self):
+    def unibo_ws_recv(self):
         while True:
             result = json.loads(self.ws.recv())
-            if result["user"] != self.unibo_id:
+            if result["user"] != self.unibo_user:
                 print("Received '%s'" % result["message"]) 
+                if result["human_sensor"]:
+                    #ここにLED点滅と表情変化の処理を書く
+                elif result["head_sensor"]:
+                    #ここに表情とdiscoの処理を書く
+                elif result["greeting"]:
+                    #ここに表情と挨拶の処理を書く
         ws.close()
-ws = Ws()
-wss = Thread(target=ws.ws_send)
-wsr = Thread(target=ws.ws_recv)
+ws = UniboWs()
+wss = Thread(target=ws.unibo_ws_send)
+wsr = Thread(target=ws.unibo_ws_recv)
 
 wss.start()
 wsr.start()
