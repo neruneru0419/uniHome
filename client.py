@@ -7,7 +7,7 @@ from threading import Thread
 class UniboWs:
     def __init__(self):
 
-        self.ws = create_connection("wss://neruneru.higashi.dev/sampleapp/ws")
+        self.ws = create_connection("wss://neruneru.higashi.dev/uniHome/ws")
         with open("./Unibodata.json", "r") as f
             self.unibo_data = json.load(f)
         #ユーザーの設定
