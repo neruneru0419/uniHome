@@ -3,9 +3,9 @@ import time
 import threading
 import audio
 import dance
+def disco():
+    thread_audio = threading.Thread(target=audio.sound)
+    thread_dance = threading.Thread(target=dance.dance)
 
-thread_audio = threading.Thread(target=audio.sound)
-thread_dance = threading.Thread(target=dance.dance)
-
-thread_audio.start()
-thread_dance.start()
+    thread_audio.start()
+    thread_dance.start()
