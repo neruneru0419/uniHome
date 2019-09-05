@@ -10,16 +10,16 @@ class UniboWs:
         self.ws = create_connection("wss://neruneru.higashi.dev/uniHome/ws")
         with open("./Unibodata.json", "r") as f
             self.unibo_data = json.load(f)
-        #ユーザーの設定
-        unibo_user = "child"
+        unibo_user = "child"#ユーザーの設定
         self.unibo_data["user"] = unibo_user
     #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
-            #ここにjsonのFalseを変化させる処理を書きたい
+            #ここにjsonのフラグを変化させる処理を書きたい
             result = json.dumps(self.unibo_data)
             self.ws.send(result)
         ws.close()
+    #uniboやスマホからのデータ受信
     def unibo_ws_recv(self):
         while True:
             result = json.loads(self.ws.recv())
