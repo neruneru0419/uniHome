@@ -2,6 +2,6 @@
     "type" : "",
     "user" : "",
     "human_sensor" : false,
-    "head_sensor" : false,
+    "head_sensor" : true,
     "greeting" : false
 }

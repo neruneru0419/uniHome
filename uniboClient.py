@@ -3,6 +3,7 @@ import time
 import json
 import disco
 import seiden
+import UniboFace
 from websocket import create_connection
 from threading import Thread
 #websocket通信のためのクラス
@@ -13,10 +14,13 @@ class UniboWs:
             self.unibo_data = json.load(f)
         self.unibo_user = "child"#ユーザーの設定
         self.unibo_data["user"] = self.unibo_user
+        self.face_number = 1
         print(self.unibo_data)
-    #uniboからのデータ送信
     def unibo_sensor(self):
         self.unibo_data["head_sensor"] = seiden.seiden()
+    def unibo_face(self):
+        UniboFace.DotMatrixLED().loop_face(self.face_number)
+    #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
             result = json.dumps(self.unibo_data)
