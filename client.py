@@ -6,31 +6,32 @@ from threading import Thread
 #websocket通信のためのクラス
 class UniboWs:
     def __init__(self):
-
+        print("hoge")
         self.ws = create_connection("wss://neruneru.higashi.dev/uniHome/ws")
-        with open("./Unibodata.json", "r") as f
+        with open("./UniboAppData.json", "r") as f:
             self.unibo_data = json.load(f)
-        unibo_user = "child"#ユーザーの設定
-        self.unibo_data["user"] = unibo_user
+        self.unibo_user = "child"#ユーザーの設定
+        self.unibo_data["user"] = self.unibo_user
+        print(self.unibo_data)
     #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
             #ここにjsonのフラグを変化させる処理を書きたい
             result = json.dumps(self.unibo_data)
             self.ws.send(result)
-        ws.close()
+        self.ws.close()
     #uniboやスマホからのデータ受信
     def unibo_ws_recv(self):
         while True:
             result = json.loads(self.ws.recv())
             if result["user"] != self.unibo_user:
-                print("Received '%s'" % result["message"]) 
+                print("Received '%s'" % result) 
                 if result["human_sensor"]:
-                    #ここにLED点滅と表情変化の処理を書く
+                    pass#ここにLED点滅と表情変化の処理を書く
                 elif result["head_sensor"]:
-                    #ここに表情とdiscoの処理を書く
+                    pass#ここに表情とdiscoの処理を書く
                 elif result["greeting"]:
-                    #ここに表情と挨拶の処理を書く
+                    pass#ここに表情と挨拶の処理を書く
         ws.close()
 ws = UniboWs()
 wss = Thread(target=ws.unibo_ws_send)
