@@ -21,7 +21,7 @@ class UniboWs:
         while True:
             result = json.dumps(self.unibo_data)
             self.ws.send(result)
-            
+            time.sleep(60)
         self.ws.close()
     #uniboやスマホからのデータ受信
     def unibo_ws_recv(self):

@@ -1,7 +1,7 @@
 {
     "type" : "",
     "user" : "",
-    "human_sensor" : false,
+    "human_sensor" : true,
     "head_sensor" : false,
     "greeting" : false
 }

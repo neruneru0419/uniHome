@@ -8,9 +8,9 @@ class UniboWs:
     def __init__(self):
         print("hoge")
         self.ws = create_connection("wss://neruneru.higashi.dev/uniHome/ws")
-        with open("./UniboAppData.json", "r") as f:
+        with open("./UniboRoboData.json", "r") as f:
             self.unibo_data = json.load(f)
-        self.unibo_user = "child"#ユーザーの設定
+        self.unibo_user = "parent"#ユーザーの設定
         self.unibo_data["user"] = self.unibo_user
         print(self.unibo_data)
     #uniboからのデータ送信
