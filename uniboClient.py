@@ -3,7 +3,11 @@ import time
 import json
 import disco
 import seiden
+import led_fade
 import UniboFace
+import UniboHumanSensor
+import Unibomic
+import UniboArm
 from websocket import create_connection
 from threading import Thread
 #websocket通信のためのクラス
@@ -15,11 +19,16 @@ class UniboWs:
         self.unibo_user = "child"#ユーザーの設定
         self.unibo_data["user"] = self.unibo_user
         self.face_number = 1
+        self.unibohs = UniboHumanSensor.UniboHumanSensor()
         print(self.unibo_data)
-    def unibo_sensor(self):
-        self.unibo_data["head_sensor"] = seiden.seiden()
     def unibo_face(self):
-        UniboFace.DotMatrixLED().loop_face(self.face_number)
+        UniboFace.DotMatrixLED().loop_face(self.face_number)    
+    def unibo_headsensor(self):
+        self.unibo_data["head_sensor"] = seiden.seiden()
+    def unibo_humansensor(self):
+        self.unibo_data["human_sensor"] = self.unibohs.human_sensor()
+    def unibo_greeting(self):
+        self.unibo_data["words"] , self.unibo_data["greeting"] = Unibomic.uniboMic()
     #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
@@ -33,17 +42,24 @@ class UniboWs:
             if result["user"] != self.unibo_user:
                 print("Received '%s'" % result) 
                 if result["human_sensor"]:
-                    pass#ここにLED点滅と表情変化の処理を書く
+                    led_fade.led_fade()
                 elif result["head_sensor"]:
                     disco.disco()
                 elif result["greeting"]:
-                    pass#ここに表情と挨拶の処理を書く
+                    UniboArm.Arm(result["words"])
+                    
         ws.close()
 ws = UniboWs()
 unibo_wss = Thread(target=ws.unibo_ws_send)
 unibo_wsr = Thread(target=ws.unibo_ws_recv)
-sensor = Thread(target=ws.unibo_sensor)
+face = Thread(target=ws.unibo_face)
+head_sensor = Thread(target=ws.unibo_headsensor)
+human_sensor = Thread(target=ws.unibo_humansensor)
+greeting_sensor = Thread(target=ws.unibo_greeting)
 
 unibo_wss.start()
 unibo_wsr.start()
-sensor.start()
+face.start()
+head_sensor.start()
+human_sensor.start()
+greeting_sensor.start()

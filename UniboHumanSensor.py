@@ -1,4 +1,3 @@
-
 import RPi.GPIO as GPIO
 import time
 
@@ -11,11 +10,9 @@ class UniboHumanSensor:
         try:
             while True:    
                 if GPIO.input(26):
-                    print("YES")
-                    time.sleep(1)
+                    return False
                 else:
-                    print("NO")
-                    time.sleep(1)
+                    return True
         except(KeyboardInterrupt):
             print("interrupt")
         GPIO.cleanup()

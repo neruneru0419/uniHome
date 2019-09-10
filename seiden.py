@@ -9,8 +9,6 @@ def seiden():
         if GPIO.input(14) != 0:
             i += 0.1
         else:
-            return False
-
+            i = 0
         time.sleep(0.1)
     return True
-#GPIO.cleanup()
