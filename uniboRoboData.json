@@ -4,5 +4,5 @@
     "human_sensor" : false,
     "head_sensor" : true,
     "greeting" : false,
-    "word" : ""
+    "word" : "",
 }
