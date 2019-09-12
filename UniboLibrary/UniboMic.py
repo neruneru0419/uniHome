@@ -1,5 +1,5 @@
 import speech_recognition as sr
-def uniboMic():
+def mic():
     record = sr.Recognizer()
     mic = sr.Microphone()
     isGreeting = False

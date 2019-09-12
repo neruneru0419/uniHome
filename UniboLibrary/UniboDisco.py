@@ -1,6 +1,16 @@
 import RPi.GPIO as GPIO
 import time
+import threading
+import subprocess
+def sound():
+    GPIO.setmode(GPIO.BCM)
 
+    CMD = "aplay /home/pi/hello-Pi/トーマス.wav"
+    try:
+        subprocess.call(CMD, shell=True)
+
+    except KeyboardInterrupt:
+        pass
 def dance():
     GPIO.setmode(GPIO.BCM)
 
@@ -12,7 +22,6 @@ def dance():
     left = GPIO.PWM(23, 50)
     left.start(0)
 
-    #def dance():
     for i in range(8):
         right.ChangeDutyCycle(2.5)
         left.ChangeDutyCycle(4.875)
@@ -21,5 +30,11 @@ def dance():
         right.ChangeDutyCycle(9.625)
         left.ChangeDutyCycle(12)
         time.sleep(0.5)
+def disco():
+    thread_audio = threading.Thread(target=sound)
+    thread_dance = threading.Thread(target=dance)
 
-    GPIO.cleanup()
+    thread_audio.start()
+    thread_dance.start()
+
+

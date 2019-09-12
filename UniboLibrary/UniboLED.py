@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-def led.fade():
+def led_fade():
     rPin = 21
     gPin = 15
 

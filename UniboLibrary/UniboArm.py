@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import threading
 
-def Arm(words):
+def greeting(words):
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(24, GPIO.OUT)
