@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
 )
-func Fileread(){
+func fileRead()(string){
 	file, err := os.Open("./UniboLog.txt")
 	if err != nil{
 		fmt.Println("FileReadError")
@@ -34,9 +34,9 @@ func main() {
 		m.HandleRequest(ctx.Writer, ctx.Request)
 	})
 	rg.GET("/api/log", func(ctx *gin.Context) {
-		log = Fileread()
+		uniboLog = fileRead()
 		ctx.JSON(200, gin.H{
-			"message": log,
+			"message": uniboLog,
 		})
 	})
 	rg.GET("/api/reaction", func(ctx *gin.Context) {
