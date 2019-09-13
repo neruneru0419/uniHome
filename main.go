@@ -3,11 +3,24 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"io/ioutil"
 
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
 )
+func Fileread(){
+	file, err := os.Open("./UniboLog.txt")
+	if err != nil{
+		fmt.Println("FileReadError")
+	}
+	defer file.Close()
+
+	log, err := ioutil.ReadAll(file)
+
+	return string(log)
+}
 
 func main() {
 	log.Println("Websocket App start.")
@@ -21,8 +34,9 @@ func main() {
 		m.HandleRequest(ctx.Writer, ctx.Request)
 	})
 	rg.GET("/api/log", func(ctx *gin.Context) {
+		log = Fileread()
 		ctx.JSON(200, gin.H{
-			"message": "hello, world",
+			"message": log,
 		})
 	})
 	rg.GET("/api/reaction", func(ctx *gin.Context) {
