@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
@@ -20,6 +19,21 @@ func main() {
 
 	rg.GET("/ws", func(ctx *gin.Context) {
 		m.HandleRequest(ctx.Writer, ctx.Request)
+	})
+	rg.GET("/api/log", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "hello, world",
+		})
+	})
+	rg.GET("/api/reaction", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "hello, world",
+		})
+	})
+	rg.POST("/api/action", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "hello, world",
+		})
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
