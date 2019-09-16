@@ -6,8 +6,10 @@ def mic():
     with mic as source:
         record.adjust_for_ambient_noise(source)
         audio = record.listen(source)
-
-    words = record.recognize_google(audio, language='ja-JP')
-    if (isGreeting == "おはよう" or isGreeting == "おやすみ" or isGreeting == "ただいま"):
+    try:
+        words = record.recognize_google(audio, language='ja-JP')
+    except: 
+        words = ""
+    if (words == "おはよう" or words == "おやすみ" or words == "ただいま"):
         isGreeting = True
     return words, isGreeting
