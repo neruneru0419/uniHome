@@ -13,44 +13,60 @@ class UniboBody(pygame.sprite.Sprite):
     # スプライトを作成(画像ファイル名, 位置(x, y), 速さ(vx, vy), 回転angle)
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image_name = "img/unibo_noface_1.png"
+        self.image_name = "img/unibo_face_1.png"
         self.image = pygame.image.load(self.image_name).convert_alpha()
         self.image = pygame.transform.scale(self.image, (417, 490)) #200 * 130に画像を縮小
         self.x, self.y = 180, 50
         self.w = self.image.get_width()
         self.h = self.image.get_height()
         self.rect = Rect(self.x, self.y, self.w, self.h)
-    def change_image(self):
-        self.image_name = "img/unibo_dance.png"
-        self.image = pygame.image.load(self.image_name).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (417, 490)) #200 * 130に画像を縮小
-        self.rect = Rect(self.x, self.y, self.w, self.h)
+    def unibo_animation(self, flgnmb):
+        if flgnmb == 1:
+            self.image = pygame.image.load("img/unibo_face_1.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (417, 490))
+        if flgnmb == 2:
+            self.image = pygame.image.load("img/unibo_face_2.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (417, 490))
+    def unibo_danceing(self, start_time, dance_time):
+        now_time = start_time - dance_time
+        if now_time == 0:
+            self.image = pygame.image.load("img/dance1_1.png").convert_alpha()
+            dance_w = self.image.get_width()
+            dance_h = self.image.get_height()
+            self.image = pygame.transform.scale(self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
+            self.rect = Rect(self.x - 60, self.y, self.w, self.h)
+            return False
+        elif now_time == 1:
+            self.image = pygame.image.load("img/dance1_2.png").convert_alpha()
+            dance_w = self.image.get_width()
+            dance_h = self.image.get_height()
+            self.image = pygame.transform.scale(self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
+            self.rect = Rect(self.x - 60, self.y, self.w, self.h)
+            return False
+        elif now_time == 2:
+            self.image = pygame.image.load("img/dance2_1.png").convert_alpha()
+            dance_w = self.image.get_width()
+            dance_h = self.image.get_height()
+            self.image = pygame.transform.scale(self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
+            self.rect = Rect(self.x - 60, self.y, self.w, self.h)
+            return False
+        elif now_time == 3:
+            self.image = pygame.image.load("img/dance2_2.png").convert_alpha()
+            dance_w = self.image.get_width()
+            dance_h = self.image.get_height()
+            self.image = pygame.transform.scale(self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
+            self.rect = Rect(self.x - 60, self.y, self.w, self.h)
+            return False
+        elif now_time == 4:
+            self.image = pygame.image.load("img/unibo_face_1.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (417, 490))
+            self.rect = Rect(self.x, self.y, self.w, self.h)
+            return True
+
     def update(self, screen):
         if self.image_name == "img/unibo_dance.png":
             pass
-class UniboFace(pygame.sprite.Sprite):
-    # スプライトを作成(画像ファイル名, 位置(x, y), 速さ(vx, vy), 回転angle)
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/face_normal_1.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (121, 115)) #200 * 130に画像を縮小
-        self.x, self.y = 328, 215
-        self.w = self.image.get_width()
-        self.h = self.image.get_height()
-        self.rect = Rect(self.x, self.y, self.w, self.h)
-    def unibo_update(self, flgnmb):
-        if flgnmb == 1:
-            self.image = pygame.image.load("img/face_normal_2.png").convert_alpha()
-            self.image = pygame.transform.scale(self.image, (121, 115))
-        if flgnmb == 2:
-            self.image = pygame.image.load("img/face_normal_1.png").convert_alpha()
-            self.image = pygame.transform.scale(self.image, (121, 115))
-    def change_image(self):
-        self.x, self.y = 10000, 10000
-        self.rect = Rect(self.x, self.y, self.w, self.h)
-    def return_image(self):
-        self.x, self.y = 328, 215
-        self.rect = Rect(self.x, self.y, self.w, self.h)
+
 
 class UniboCursor(pygame.sprite.Sprite):
     def __init__(self):
@@ -76,8 +92,8 @@ def main():
     screen = pygame.display.set_mode(SCREEN.size)#, FULLSCREEN)
     pygame.display.set_caption("バーチャルゆにぼ") 
     mouse_move = 0
+    dance_time = 0
     unibo_body = UniboBody()
-    unibo_face = UniboFace()
     unibo_cursor = UniboCursor()
     bg = pygame.image.load("img/background.png").convert_alpha()
     bg = pygame.transform.scale(bg, (750, 600))     
@@ -85,7 +101,6 @@ def main():
     group = pygame.sprite.RenderUpdates()
     # スプライトの追加
     group.add(unibo_body)
-    group.add(unibo_face)
     group.add(unibo_cursor)
     clock = pygame.time.Clock()
     while (1):
@@ -94,16 +109,23 @@ def main():
         #背景を描画
         screen.blit(bg, (0, 0))
         #時間によってゆにぼの顔を変化
-        isTimeOdd = int(time.time() - start_time % 2)
-        if isTimeOdd:
-            unibo_face.unibo_update(1)
+        now_time = round(time.time() - start_time)
+        isTimeOdd = now_time % 2
+        if 1000 <= mouse_move:
+            if dance_time == 0:
+                dance_time = round(time.time() - start_time)
+            isEndDance = unibo_body.unibo_danceing(now_time, dance_time)
+            if isEndDance:
+                mouse_move = 0
+                dance_time = 0
+                isEndDance = False
         else:
-            unibo_face.unibo_update(2)
-        if 3000 <= mouse_move:
-            unibo_face.change_image()
-            unibo_body.change_image()
-            mouse_move = 0
-        print(time.time() - start_time)
+            if isTimeOdd:
+                unibo_body.unibo_animation(1)
+            else:
+                unibo_body.unibo_animation(2)
+
+        print(mouse_move)
         group.update(screen)
         group.draw(screen)
         # 画面更新
