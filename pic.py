@@ -84,7 +84,22 @@ class UniboCursor(pygame.sprite.Sprite):
             self.y -= int(self.image.get_height() / 2)
             self.rect = Rect(self.x, self.y, self.w, self.h)
 
-
+class UniboHurt(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("img/hurt.png").convert_alpha()
+        self.w = self.image.get_width()
+        self.h = self.image.get_height()
+        self.image = pygame.transform.scale(self.image, (int(self.w / 4), int(self.h / 4))) #200 * 130に画像を縮小
+        self.x, self.y = -300, -300
+        self.rect = Rect(self.x, self.y, self.w, self.h)
+    #カーソル移動に合わせて画像を移動
+    def put_heart(self):
+        self.x, self.y = 450, 50
+        self.rect = Rect(self.x, self.y, self.w, self.h)
+    def update(self, screen):
+            self.y -= 5
+            self.rect = Rect(self.x, self.y, self.w, self.h)
 # メイン
 
 def main():
@@ -92,9 +107,9 @@ def main():
     screen = pygame.display.set_mode(SCREEN.size)#, FULLSCREEN)
     pygame.display.set_caption("バーチャルゆにぼ") 
     mouse_move = 0
-    dance_time = 0
     unibo_body = UniboBody()
     unibo_cursor = UniboCursor()
+    unibo_hurt = UniboHurt()
     bg = pygame.image.load("img/background.png").convert_alpha()
     bg = pygame.transform.scale(bg, (750, 600))     
     # スプライトグループの作成
@@ -102,6 +117,7 @@ def main():
     # スプライトの追加
     group.add(unibo_body)
     group.add(unibo_cursor)
+    group.add(unibo_hurt)
     clock = pygame.time.Clock()
     while (1):
         clock.tick(100)  # フレームレート(100fps)
@@ -112,18 +128,13 @@ def main():
         now_time = round(time.time() - start_time)
         isTimeOdd = now_time % 2
         if 1000 <= mouse_move:
-            if dance_time == 0:
-                dance_time = round(time.time() - start_time)
-            isEndDance = unibo_body.unibo_danceing(now_time, dance_time)
-            if isEndDance:
-                mouse_move = 0
-                dance_time = 0
-                isEndDance = False
+            unibo_hurt.put_heart()
+            mouse_move = 0
+        if isTimeOdd:
+            unibo_body.unibo_animation(1)
         else:
-            if isTimeOdd:
-                unibo_body.unibo_animation(1)
-            else:
-                unibo_body.unibo_animation(2)
+            unibo_body.unibo_animation(2)
+        #if isMovehurt:
 
         print(mouse_move)
         group.update(screen)
