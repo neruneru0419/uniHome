@@ -11,8 +11,9 @@ import unibomic
 SCREEN = Rect(0, 0, 750, 600)   # 画面サイズ
 start_time = time.time()
 
-#class GetMic():
-#    def __init__(self):
+class GetMic():
+    def __init__(self):
+        pass
 class UniboBody(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -70,7 +71,6 @@ class UniboBody(pygame.sprite.Sprite):
         if self.image_name == "img/unibo_dance.png":
             pass
 
-
 class UniboCursor(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -100,13 +100,19 @@ class UniboEmotion(pygame.sprite.Sprite):
     def put_emotion(self, filename):
         self.image = pygame.image.load(filename).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.w / 4), int(self.h / 4)))
-        self.x, self.y = 450, 50
+        self.x, self.y = 330, 270
         self.rect = Rect(self.x, self.y, self.w, self.h)
     def update(self, screen):
             self.y -= 5
             self.rect = Rect(self.x, self.y, self.w, self.h)
+class Greeting():
+        words = ""
+        isGreeting = False
+class FaceRecognition():
+        isFaceRecognition = False
 
 # メイン
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode(SCREEN.size)
@@ -131,8 +137,12 @@ def main():
         #時間によってゆにぼの顔を変化
         now_time = round(time.time() - start_time)
         isTimeOdd = now_time % 2
-        if 1000 <= mouse_move:
+        #print(FaceRecognition.isFaceRecognition)
+        if Greeting.isGreeting or FaceRecognition.isFaceRecognition:
             unibo_emotion.put_emotion("img/callout.png")
+            Greeting.isGreeting = False
+        if 1000 <= mouse_move:
+            unibo_emotion.put_emotion("img/hurt.png")
             mouse_move = 0
         if isTimeOdd:
             unibo_body.unibo_animation(1)
@@ -154,9 +164,18 @@ def main():
                 pygame.quit()
                 sys.exit()
 
+def virtual_unibo_mic():
+    while True:
+        Greeting.isGreeting = unibomic.mic()
+
+def virtual_unibo_face_recognition():
+    while True:
+        FaceRecognition.isFaceRecognition = unibocv2.face_recognition()
 #main()       
 unibo_main = Thread(target=main)
-unibo_time = Thread(target=unibocv2.face_recognition)
+unibo_time = Thread(target=virtual_unibo_face_recognition)
+unibo_mic = Thread(target=virtual_unibo_mic)
 
 unibo_main.start()
 unibo_time.start()
+unibo_mic.start()
