@@ -3,19 +3,22 @@ from pygame.locals import *
 import sys
 import time
 from threading import Thread
+#from websocket import create_connection
+
+import unibocv2
+import unibomic
 
 SCREEN = Rect(0, 0, 750, 600)   # 画面サイズ
 start_time = time.time()
 
-        
-# 職業のクラス
+#class GetMic():
+#    def __init__(self):
 class UniboBody(pygame.sprite.Sprite):
-    # スプライトを作成(画像ファイル名, 位置(x, y), 速さ(vx, vy), 回転angle)
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image_name = "img/unibo_face_1.png"
         self.image = pygame.image.load(self.image_name).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (417, 490)) #200 * 130に画像を縮小
+        self.image = pygame.transform.scale(self.image, (417, 490)) 
         self.x, self.y = 180, 50
         self.w = self.image.get_width()
         self.h = self.image.get_height()
@@ -74,7 +77,7 @@ class UniboCursor(pygame.sprite.Sprite):
         self.image = pygame.image.load("img/hand.png").convert_alpha()
         self.w = self.image.get_width()
         self.h = self.image.get_height()
-        self.image = pygame.transform.scale(self.image, (int(self.w / 2), int(self.h / 2))) #200 * 130に画像を縮小
+        self.image = pygame.transform.scale(self.image, (int(self.w / 10), int(self.h / 10))) #200 * 130に画像を縮小
         self.x, self.y = 0, 0
         self.rect = Rect(self.x, self.y, self.w, self.h)
     #カーソル移動に合わせて画像を移動
@@ -84,32 +87,34 @@ class UniboCursor(pygame.sprite.Sprite):
             self.y -= int(self.image.get_height() / 2)
             self.rect = Rect(self.x, self.y, self.w, self.h)
 
-class UniboHurt(pygame.sprite.Sprite):
+class UniboEmotion(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("img/hurt.png").convert_alpha()
         self.w = self.image.get_width()
         self.h = self.image.get_height()
-        self.image = pygame.transform.scale(self.image, (int(self.w / 4), int(self.h / 4))) #200 * 130に画像を縮小
-        self.x, self.y = -300, -300
+        self.x, self.y = -1000, 0
+        self.image = pygame.transform.scale(self.image, (int(self.w / 4), int(self.h / 4)))
         self.rect = Rect(self.x, self.y, self.w, self.h)
-    #カーソル移動に合わせて画像を移動
-    def put_heart(self):
+    #ハートを出現させる
+    def put_emotion(self, filename):
+        self.image = pygame.image.load(filename).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.w / 4), int(self.h / 4)))
         self.x, self.y = 450, 50
         self.rect = Rect(self.x, self.y, self.w, self.h)
     def update(self, screen):
             self.y -= 5
             self.rect = Rect(self.x, self.y, self.w, self.h)
-# メイン
 
+# メイン
 def main():
     pygame.init()
-    screen = pygame.display.set_mode(SCREEN.size)#, FULLSCREEN)
+    screen = pygame.display.set_mode(SCREEN.size)
     pygame.display.set_caption("バーチャルゆにぼ") 
     mouse_move = 0
     unibo_body = UniboBody()
     unibo_cursor = UniboCursor()
-    unibo_hurt = UniboHurt()
+    unibo_emotion = UniboEmotion()
     bg = pygame.image.load("img/background.png").convert_alpha()
     bg = pygame.transform.scale(bg, (750, 600))     
     # スプライトグループの作成
@@ -117,26 +122,23 @@ def main():
     # スプライトの追加
     group.add(unibo_body)
     group.add(unibo_cursor)
-    group.add(unibo_hurt)
+    group.add(unibo_emotion)
     clock = pygame.time.Clock()
     while (1):
         clock.tick(100)  # フレームレート(100fps)
-        screen.fill((0, 20, 0)) # 画面の背景色
         #背景を描画
         screen.blit(bg, (0, 0))
         #時間によってゆにぼの顔を変化
         now_time = round(time.time() - start_time)
         isTimeOdd = now_time % 2
         if 1000 <= mouse_move:
-            unibo_hurt.put_heart()
+            unibo_emotion.put_emotion("img/callout.png")
             mouse_move = 0
         if isTimeOdd:
             unibo_body.unibo_animation(1)
         else:
             unibo_body.unibo_animation(2)
-        #if isMovehurt:
 
-        print(mouse_move)
         group.update(screen)
         group.draw(screen)
         # 画面更新
@@ -146,12 +148,15 @@ def main():
             # 終了用のイベント処理
             if pygame.mouse.get_pressed()[0] and pygame.sprite.collide_rect(unibo_body, unibo_cursor):
                 mouse_move += (abs(sum(pygame.mouse.get_rel())))
+            #if event.type == MOUSEBUTTONDOWN and event.button == 1:
+            #    print(unibomic.mic())
             if event.type == QUIT:          # 閉じるボタンが押されたとき
                 pygame.quit()
                 sys.exit()
-        
+
+#main()       
 unibo_main = Thread(target=main)
-#unibo_time = Thread(target=count_time)
+unibo_time = Thread(target=unibocv2.face_recognition)
 
 unibo_main.start()
-#unibo_time.start()
+unibo_time.start()
