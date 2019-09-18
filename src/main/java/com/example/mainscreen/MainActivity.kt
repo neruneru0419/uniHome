@@ -2,19 +2,26 @@ package com.example.mainscreen
 
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.example.mainscreen.R.layout.activity_main
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.speech.RecognizerIntent
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.widget.Button
+import android.widget.TextView
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +39,9 @@ class MainActivity : AppCompatActivity() {
     private var greeting_animation3_grandparents = Runnable{}
     private var notification_parents = Runnable{}
     private var notification_grandparents = Runnable{}
-
+    var permissionState = false
+    private var textView: TextView? = null
+    private var lang: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +67,36 @@ class MainActivity : AppCompatActivity() {
         val grandparents_face = findViewById<ImageView>(R.id.grandparents_face)
         val heart = findViewById<ImageView>(R.id.heart)
         val puff = findViewById<ImageView>(R.id.puff)
-        val dance_left_parents = findViewById<ImageView>(R.id.dance_left_parents)
-        val dance_right_parents = findViewById<ImageView>(R.id.dance_right_parents)
-        val dance_left_grandparents = findViewById<ImageView>(R.id.dance_left_grandparents)
-        val dance_right_grandparents = findViewById<ImageView>(R.id.dance_right_grandparents)
+        val dance1_1_parents = findViewById<ImageView>(R.id.dance1_1_parents)
+        val dance1_2_parents = findViewById<ImageView>(R.id.dance1_2_parents)
+        val dance2_1_parents = findViewById<ImageView>(R.id.dance2_1_parents)
+        val dance2_2_parents = findViewById<ImageView>(R.id.dance2_2_parents)
+        val dance1_1_grandparents = findViewById<ImageView>(R.id.dance1_1_grandparents)
+        val dance1_2_grandparents = findViewById<ImageView>(R.id.dance1_2_grandparents)
+        val dance2_1_grandparents = findViewById<ImageView>(R.id.dance2_1_grandparents)
+        val dance2_2_grandparents = findViewById<ImageView>(R.id.dance2_2_grandparents)
         val timeline_button = findViewById<ImageButton>(R.id.timeline_button)
         val mic_button = findViewById<ImageButton>(R.id.mic_button)
         val unibo_button = findViewById<ImageButton>(R.id.unibo_button)
+        val recordAudioPermission = android.Manifest.permission.RECORD_AUDIO
+        val currentPermissionState = ContextCompat.checkSelfPermission(this, recordAudioPermission)
+
+        if (currentPermissionState != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, recordAudioPermission)) {
+                // 拒否した場合
+                permissionState = false
+            } else {
+                // 許可した場合
+                ActivityCompat.requestPermissions(this, arrayOf(recordAudioPermission), 1)
+                permissionState = true
+            }
+        }
+        // 言語選択 0:日本語、1:英語、2:オフライン、その他:General
+        lang = 0
+        mic_button.setOnClickListener {
+            // 音声認識を開始
+            speech()
+        }
 
         eye_animation = Runnable {
             if(flag) {
@@ -137,16 +169,32 @@ class MainActivity : AppCompatActivity() {
             normal_face.visibility = View.INVISIBLE
             unibo_button.visibility = View.INVISIBLE
             if(flag) {
-                dance_left_parents.visibility = View.VISIBLE
-                dance_right_parents.visibility = View.INVISIBLE
-                flag = false
+                dance1_1_parents.visibility = View.VISIBLE
+                dance2_2_parents.visibility = View.INVISIBLE
+                GlobalScope.launch(Dispatchers.Main) {
+                    var job = launch {
+                        delay(500)
+                    }
+                    job.join()
+                    dance1_1_parents.visibility = View.INVISIBLE
+                    dance1_2_parents.visibility = View.VISIBLE
+                    flag = false
+                }
             }
-            else {
-                dance_left_parents.visibility = View.INVISIBLE
-                dance_right_parents.visibility = View.VISIBLE
-                flag = true
+            else{
+                dance2_1_parents.visibility = View.VISIBLE
+                dance1_2_parents.visibility = View.INVISIBLE
+                GlobalScope.launch(Dispatchers.Main) {
+                    var job = launch {
+                        delay(500)
+                    }
+                    job.join()
+                    dance2_1_parents.visibility = View.INVISIBLE
+                    dance2_2_parents.visibility = View.VISIBLE
+                    flag = true
+                }
             }
-            handler.postDelayed(dance_animation_parents, 2000)
+            handler.postDelayed(dance_animation_parents, 1000)
         }
 
         dance_animation_grandparents = Runnable{
@@ -154,16 +202,32 @@ class MainActivity : AppCompatActivity() {
             normal_face.visibility = View.INVISIBLE
             unibo_button.visibility = View.INVISIBLE
             if(flag) {
-                dance_left_grandparents.visibility = View.VISIBLE
-                dance_right_grandparents.visibility = View.INVISIBLE
-                flag = false
+                dance1_1_grandparents.visibility = View.VISIBLE
+                dance2_2_grandparents.visibility = View.INVISIBLE
+                GlobalScope.launch(Dispatchers.Main) {
+                    var job = launch {
+                        delay(500)
+                    }
+                    job.join()
+                    dance1_1_grandparents.visibility = View.INVISIBLE
+                    dance1_2_grandparents.visibility = View.VISIBLE
+                    flag = false
+                }
             }
-            else {
-                dance_left_grandparents.visibility = View.INVISIBLE
-                dance_right_grandparents.visibility = View.VISIBLE
-                flag = true
+            else{
+                dance2_1_grandparents.visibility = View.VISIBLE
+                dance1_2_grandparents.visibility = View.INVISIBLE
+                GlobalScope.launch(Dispatchers.Main) {
+                    var job = launch {
+                        delay(500)
+                    }
+                    job.join()
+                    dance2_1_grandparents.visibility = View.INVISIBLE
+                    dance2_2_grandparents.visibility = View.VISIBLE
+                    flag = true
+                }
             }
-            handler.postDelayed(dance_animation_grandparents, 2000)
+            handler.postDelayed(dance_animation_grandparents, 1000)
         }
 
         greeting_animation1_parents = Runnable{
@@ -180,7 +244,7 @@ class MainActivity : AppCompatActivity() {
                 goodmorning_2_parents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation1_parents, 3000)
+            handler.postDelayed(greeting_animation1_parents, 1000)
         }
 
         greeting_animation2_parents = Runnable{
@@ -197,7 +261,7 @@ class MainActivity : AppCompatActivity() {
                 goodnight_2_parents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation2_parents, 3000)
+            handler.postDelayed(greeting_animation2_parents, 1000)
         }
 
         greeting_animation3_parents = Runnable{
@@ -214,7 +278,7 @@ class MainActivity : AppCompatActivity() {
                 welcomehome_2_parents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation3_parents, 3000)
+            handler.postDelayed(greeting_animation3_parents, 1000)
         }
 
         greeting_animation1_grandparents = Runnable{
@@ -231,7 +295,7 @@ class MainActivity : AppCompatActivity() {
                 goodmorning_2_grandparents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation1_grandparents, 3000)
+            handler.postDelayed(greeting_animation1_grandparents, 1000)
         }
 
         greeting_animation2_grandparents = Runnable{
@@ -248,7 +312,7 @@ class MainActivity : AppCompatActivity() {
                 goodnight_2_grandparents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation2_grandparents, 3000)
+            handler.postDelayed(greeting_animation2_grandparents, 1000)
         }
 
         greeting_animation3_grandparents = Runnable{
@@ -265,7 +329,7 @@ class MainActivity : AppCompatActivity() {
                 welcomehome_2_grandparents.visibility = View.VISIBLE
                 flag = true
             }
-            handler.postDelayed(greeting_animation3_grandparents, 3000)
+            handler.postDelayed(greeting_animation3_grandparents, 1000)
         }
 
         notification_parents = Runnable{
@@ -306,13 +370,6 @@ class MainActivity : AppCompatActivity() {
 
         handler.post(eye_animation)
 
-        mic_button.setOnClickListener {
-            mic_button.isClickable = false
-            unibo_button.isClickable = false
-            timeline_button.isClickable = false
-            handler.postDelayed(puff_animation,1000)
-        }
-
         unibo_button.setOnClickListener {
             mic_button.isClickable = false
             unibo_button.isClickable = false
@@ -340,10 +397,14 @@ class MainActivity : AppCompatActivity() {
             goodnight_2_grandparents.visibility = View.INVISIBLE
             welcomehome_1_grandparents.visibility = View.INVISIBLE
             welcomehome_2_grandparents.visibility = View.INVISIBLE
-            dance_left_parents.visibility = View.INVISIBLE
-            dance_left_grandparents.visibility = View.INVISIBLE
-            dance_right_parents.visibility = View.INVISIBLE
-            dance_right_grandparents.visibility = View.INVISIBLE
+            dance1_1_parents.visibility = View.INVISIBLE
+            dance1_2_parents.visibility = View.INVISIBLE
+            dance2_1_parents.visibility = View.INVISIBLE
+            dance2_2_parents.visibility = View.INVISIBLE
+            dance1_1_grandparents.visibility = View.INVISIBLE
+            dance1_2_grandparents.visibility = View.INVISIBLE
+            dance2_1_grandparents.visibility = View.INVISIBLE
+            dance2_2_grandparents.visibility = View.INVISIBLE
             handler.post(eye_animation)
             handler.removeCallbacks(notification_parents)
             handler.removeCallbacks(notification_grandparents)
@@ -356,5 +417,58 @@ class MainActivity : AppCompatActivity() {
             handler.removeCallbacks(dance_animation_parents)
             handler.removeCallbacks(dance_animation_grandparents)
         }
+    }
+    private fun speech() {
+        // 音声認識の　Intent インスタンス
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+
+        if (lang == 0) {
+            // 日本語
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.JAPAN.toString())
+        } else if (lang == 1) {
+            // 英語
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH.toString())
+        } else if (lang == 2) {
+            // Off line mode
+            intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+        } else {
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+        }
+
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100)
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "音声を入力")
+
+        try {
+            // インテント発行
+            startActivityForResult(intent, REQUEST_CODE)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+
+        }
+
+    }
+
+    // 結果を受け取るために onActivityResult を設置
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // 認識結果を ArrayList で取得
+            val candidates = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
+            if (candidates.size > 0) {
+                if(candidates[0] == "こんにちは"){
+                    handler.postDelayed(puff_animation,1000)
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        private val REQUEST_CODE = 1000
     }
 }
