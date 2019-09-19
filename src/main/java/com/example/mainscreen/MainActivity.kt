@@ -21,6 +21,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -460,8 +461,14 @@ class MainActivity : AppCompatActivity() {
             val candidates = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
             if (candidates.size > 0) {
-                if(candidates[0] == "こんにちは"){
-                    handler.postDelayed(puff_animation,1000)
+                if (candidates[0] == "おはよう") {
+                    handler.postDelayed(puff_animation, 1000)
+                }
+                if (candidates[0] == "おかえり" || candidates[0] == "ただいま") {
+                    handler.postDelayed(puff_animation, 1000)
+                }
+                if(candidates[0] == "おやすみ"){
+                    handler.postDelayed(puff_animation, 1000)
                 }
             }
         }
