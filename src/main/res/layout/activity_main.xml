@@ -31,7 +31,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
             app:layout_constraintVertical_bias="0.517"
-            app:layout_constraintHorizontal_bias="0.5"/> //バウンドゆにぼ
+            app:layout_constraintHorizontal_bias="0.5"/>
+    //バウンドゆにぼ
+
+    //おはよう１　親
 
     <ImageView
             android:id="@+id/goodmorning_1_parents"
@@ -44,8 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
             app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintVertical_bias="0.501"/> //おはよう１　親
-
+            app:layout_constraintVertical_bias="0.501"/>
     <ImageView
             android:id="@+id/goodmorning_2_parents"
             android:src="@drawable/goodmorning_2_parents"
@@ -56,7 +58,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //おはよう２　親
+            app:layout_constraintVertical_bias="0.54"
+    /> //おはよう２　親
 
     <ImageView
             android:id="@+id/goodnight_1_parents"
@@ -81,7 +84,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //おやすみ２　親
+            app:layout_constraintVertical_bias="0.54"/> //おやすみ２　親
 
     <ImageView
             android:id="@+id/welcomehome_1_parents"
@@ -106,7 +109,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //ただいま・おかえり２　親
+            app:layout_constraintVertical_bias="0.54"/> //ただいま・おかえり２　親
 
     <ImageView
             android:id="@+id/goodmorning_1_grandparents"
@@ -131,7 +134,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //おはよう２　祖父母
+            app:layout_constraintVertical_bias="0.54"/> //おはよう２　祖父母
 
     <ImageView
             android:id="@+id/goodnight_1_grandparents"
@@ -156,7 +159,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //おやすみ２　祖父母
+            app:layout_constraintVertical_bias="0.54"/> //おやすみ２　祖父母
 
     <ImageView
             android:id="@+id/welcomehome_1_grandparents"
@@ -181,11 +184,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //ただいま・おかえり２　祖父母
+            app:layout_constraintVertical_bias="0.54"/> //ただいま・おかえり２　祖父母
 
     <ImageView
-            android:id="@+id/dance_left_parents"
-            android:src="@drawable/dance_left_parents"
+            android:id="@+id/dance1_1_parents"
+            android:src="@drawable/dance1_1_parents"
             android:layout_width="250dp"
             android:layout_height="250dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -193,11 +196,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //左ダンス　親
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　１－１　親
 
     <ImageView
-            android:id="@+id/dance_right_parents"
-            android:src="@drawable/dance_right_parents"
+            android:id="@+id/dance1_2_parents"
+            android:src="@drawable/dance1_2_parents"
             android:layout_width="250dp"
             android:layout_height="250dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -205,11 +208,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //右ダンス　親
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　１－２　親
 
     <ImageView
-            android:id="@+id/dance_left_grandparents"
-            android:src="@drawable/dance_left_grandparents"
+            android:id="@+id/dance2_1_parents"
+            android:src="@drawable/dance2_1_parents"
             android:layout_width="250dp"
             android:layout_height="250dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -217,11 +220,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //左ダンス　祖父母
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　２－１　親
 
     <ImageView
-            android:id="@+id/dance_right_grandparents"
-            android:src="@drawable/dance_right_grandparents"
+            android:id="@+id/dance2_2_parents"
+            android:src="@drawable/dance2_2_parents"
             android:layout_width="250dp"
             android:layout_height="250dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -229,7 +232,55 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"
-            app:layout_constraintVertical_bias="0.53"/> //右ダンス　祖父母
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　２－２　親
+
+    <ImageView
+            android:id="@+id/dance1_1_grandparents"
+            android:src="@drawable/dance1_1_grandparents"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　１－１　祖父母
+
+    <ImageView
+            android:id="@+id/dance1_2_grandparents"
+            android:src="@drawable/dance1_2_grandparents"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　１－２　祖父母
+
+    <ImageView
+            android:id="@+id/dance2_1_grandparents"
+            android:src="@drawable/dance2_1_grandparents"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　２－１　祖父母
+
+    <ImageView
+            android:id="@+id/dance2_2_grandparents"
+            android:src="@drawable/dance2_2_grandparents"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintVertical_bias="0.53"/> //ダンス　２－２　祖父母
 
     <ImageView
             android:id="@+id/notification_unibo"
