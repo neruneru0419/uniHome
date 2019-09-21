@@ -1,21 +1,33 @@
 package main
 
 import (
+	"./uniboLog"
 	"fmt"
 	"log"
-	"net/http"
-
+	"os"
+	"io/ioutil"
+	"encoding/json"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
 )
+func fileRead()(string){
+	file, err := os.Open("./UniboLog.txt")
+	if err != nil{
+		fmt.Println("FileReadError")
+	}
+	defer file.Close()
+
+	log, err := ioutil.ReadAll(file)
+
+	return string(log)
+}
 
 func main() {
 	log.Println("Websocket App start.")
 
 	router := gin.Default()
 	m := melody.New()
-
 	rg := router.Group("/uniHome")
 
 	rg.GET("/ws", func(ctx *gin.Context) {
@@ -23,8 +35,11 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		var uniboData uniboLog.UniboData
 		m.Broadcast(msg)
-		fmt.Println(msg)
+		json.Unmarshal(msg, &uniboData)
+		uniboLog.WriteLog(uniboData)
+		fmt.Println(uniboData.Words)
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
