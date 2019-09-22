@@ -38,11 +38,11 @@ func getName(name string) string {
 func getAction(uniboData UniboData, userName string) string {
 	var messageLog string
 	if uniboData.HeadSensor {
-		messageLog = (userName + "がゆにぼのあたまを撫でました")
+		messageLog = ("ゆにぼのあたまを撫でました")
 	} else if uniboData.HumanSensor {
-		messageLog = (userName + "がゆにぼの近くを通りました")
+		messageLog = ("ゆにぼの近くを通りました")
 	} else if uniboData.Greeting {
-		messageLog = (userName + "が" + uniboData.Words + "と挨拶をしました")
+		messageLog = ("「" + uniboData.Words + "」" + "と挨拶をしました")
 	}
 
 	return messageLog
@@ -55,7 +55,7 @@ func WriteLog(uniboData UniboData) {
 	}
 	nowTime := getTime()
 	name := getName(uniboData.User)
-	action := getAction(uniboData, name)
+	action := getAction(uniboData)
 	logs := "	{\n		\"name\": \"" + name + "\",  \n		\"time\": \"" + nowTime + "\", \n		\"log\": \"" + action + "\"\n	}\n"
 	lastWord := len(bytes) - 2
 	content := []byte(string(bytes)[:lastWord] + ",\n" + logs + "]")
