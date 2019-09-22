@@ -35,7 +35,7 @@ func getName(name string) string {
 	}
 	return user
 }
-func getAction(uniboData UniboData, userName string) string {
+func getAction(uniboData UniboData) string {
 	var messageLog string
 	if uniboData.HeadSensor {
 		messageLog = ("ゆにぼのあたまを撫でました")
