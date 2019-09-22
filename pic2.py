@@ -3,7 +3,7 @@ from pygame.locals import *
 import sys
 import json
 import time
-from threading import Thread
+import concurrent.futures
 from websocket import create_connection
 
 import unibocv2
@@ -194,14 +194,11 @@ def virtual_unibo_face_recognition():
         FaceRecognition.isFaceRecognition = unibocv2.face_recognition()
 #main()       
 ws = UniboWs()
-wss = Thread(target=ws.unibo_ws_send)
-wsr = Thread(target=ws.unibo_ws_recv)
-unibo_main = Thread(target=main)
-unibo_time = Thread(target=virtual_unibo_face_recognition)
-unibo_mic = Thread(target=virtual_unibo_mic)
+if __name__ == "__main__":
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+    executor.submit(ws.unibo_ws_recv)
+    executor.submit(ws.unibo_ws_send)
+    executor.submit(main)
+    #executor.submit(virtual_unibo_face_recognition)
+    #executor.submit(virtual_unibo_mic)
 
-wss.start()
-wsr.start()
-unibo_main.start()
-unibo_time.start()
-unibo_mic.start()

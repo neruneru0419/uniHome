@@ -36,4 +36,3 @@ def face_recognition():
     return isFaceRecognition
     # 次のフレーム読み込み
     end_flag, c_frame = cap.read()
-face_recognition()
