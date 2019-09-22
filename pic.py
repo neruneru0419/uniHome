@@ -32,9 +32,6 @@ class UniboWs:
             pass
         ws.close()
 
-class GetMic():
-    def __init__(self):
-        pass
 class UniboBody(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
