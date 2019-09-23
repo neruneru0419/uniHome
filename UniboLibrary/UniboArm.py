@@ -14,14 +14,18 @@ def greeting(words):
     left.start(0)
 
     val = [2.5, 3.6875, 4.875, 6.0625, 7.25, 8.4375, 9.625, 10.8125, 12]
- 
 
     if words == "おやすみ": 
         right.ChangeDutyCycle(val[7])
         left.ChangeDutyCycle(val[1])
+        time.sleep(3)
     elif words == "ただいま":
         right.ChangeDutyCycle(val[5])
         left.ChangeDutyCycle(val[8])
+        time.sleep(3)
     elif words == "おはよう":
         right.ChangeDutyCycle(val[5])
         left.ChangeDutyCycle(val[3])
+        time.sleep(3)
+    right.ChangeDutyCycle(val[8])
+    left.ChangeDutyCycle(val[8])

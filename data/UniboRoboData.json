@@ -1,0 +1,8 @@
+{
+    "type" : "robot",
+    "user" : "grand_parents",
+    "human_sensor" : false,
+    "head_sensor" : false,
+    "greeting" : false,
+    "words" : ""
+}

@@ -17,7 +17,7 @@ def led_fade():
     g.start(0)
 
     try:
-        while True:
+        for i in range(2):
             for dc in range(0, 101, 4):
                 r.ChangeDutyCycle(dc)
                 g.ChangeDutyCycle(dc)

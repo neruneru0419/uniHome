@@ -30,11 +30,12 @@ def dance():
         right.ChangeDutyCycle(9.625)
         left.ChangeDutyCycle(12)
         time.sleep(0.5)
+    right.ChangeDutyCycle(12)
+    time.sleep(0.5)
 def disco():
     thread_audio = threading.Thread(target=sound)
     thread_dance = threading.Thread(target=dance)
 
     thread_audio.start()
     thread_dance.start()
-
 
