@@ -74,7 +74,6 @@ class UniboWs:
                     UniboLED.led_fade()
                 #挨拶を聞いたら、挨拶のポーズを取る
                 elif result["greeting"]:
-                    print("hoge")
                     UniboArm.greeting(result["words"])
             
         self.ws.close()
