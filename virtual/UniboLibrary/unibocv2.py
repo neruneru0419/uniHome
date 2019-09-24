@@ -12,7 +12,7 @@ def face_recognition():
     DEVICE_ID = 0
 
     # 分類器の指定
-    cascade_file = "haarcascade_frontalface_alt2.xml"
+    cascade_file = "data/haarcascade_frontalface_alt2.xml"
     cascade = cv2.CascadeClassifier(cascade_file)
 
     # カメラ映像取得
