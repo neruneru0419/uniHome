@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	log.Println("Websocket App start.")
+	log.Println("uniHome Server Start.")
 
 	router := gin.Default()
 	m := melody.New()
@@ -40,5 +40,5 @@ func main() {
 
 	log.Fatal(autotls.Run(router, "neruneru.higashi.dev"))
 
-	fmt.Println("Websocket App End.")
+	fmt.Println("uniHome Server End.")
 }

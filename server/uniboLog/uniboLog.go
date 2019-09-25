@@ -48,7 +48,7 @@ func getAction(uniboData UniboData) string {
 	return messageLog
 }
 func WriteLog(uniboData UniboData) {
-	bytes, err := ioutil.ReadFile("log.json")
+	bytes, err := ioutil.ReadFile("uniboLog/log.json")
 	fmt.Println(bytes)
 	if err != nil {
 		log.Fatal(err)
