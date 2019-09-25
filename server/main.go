@@ -26,16 +26,8 @@ func main() {
 		m.Broadcast(msg)
 		json.Unmarshal(msg, &uniboData)
 		if uniboData.HeadSensor || uniboData.HumanSensor || uniboData.Greeting{
-<<<<<<< HEAD
 			uniboLog.WriteLog(uniboData)
 		}
-		fmt.Println(uniboData.Words)
-=======
-			fmt.Println("hoge")
-			uniboLog.WriteLog(uniboData)
-		}
-		fmt.Println(uniboData.HeadSensor, uniboData.HumanSensor, uniboData.Greeting)
->>>>>>> server
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
