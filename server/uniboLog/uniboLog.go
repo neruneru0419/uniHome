@@ -20,6 +20,12 @@ func getTime() string {
 	t := time.Now()
 	hour := strconv.Itoa(t.Hour())
 	minute := strconv.Itoa(t.Minute())
+	if len(hour) == 1{
+		hour = "0" + hour
+	}
+	if len(minute) == 1{
+		minute = "0" + minute
+	}
 	nowTime := (hour + ":" + minute)
 
 	return nowTime
