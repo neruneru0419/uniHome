@@ -20,6 +20,7 @@ func getTime() string {
 	t := time.Now()
 	hour := strconv.Itoa(t.Hour())
 	minute := strconv.Itoa(t.Minute())
+	fmt.Println(len(hour))
 	if len(hour) == 1{
 		hour = "0" + hour
 	}
@@ -54,7 +55,7 @@ func getAction(uniboData UniboData) string {
 	return messageLog
 }
 func WriteLog(uniboData UniboData) {
-	bytes, err := ioutil.ReadFile("uniboLog/log.json")
+	bytes, err := ioutil.ReadFile("log.json")
 	fmt.Println(bytes)
 	if err != nil {
 		log.Fatal(err)
