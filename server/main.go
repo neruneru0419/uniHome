@@ -17,19 +17,25 @@ func main() {
 	router := gin.Default()
 	m := melody.New()
 	rg := router.Group("/uniHome")
-
+	var uniboData uniboLog.UniboData
 	rg.GET("/ws", func(ctx *gin.Context) {
 		m.HandleRequest(ctx.Writer, ctx.Request)
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		var uniboData uniboLog.UniboData
 		m.Broadcast(msg)
 		json.Unmarshal(msg, &uniboData)
 		if uniboData.HeadSensor || uniboData.HumanSensor || uniboData.Greeting{
+<<<<<<< HEAD
 			uniboLog.WriteLog(uniboData)
 		}
 		fmt.Println(uniboData.Words)
+=======
+			fmt.Println("hoge")
+			uniboLog.WriteLog(uniboData)
+		}
+		fmt.Println(uniboData.HeadSensor, uniboData.HumanSensor, uniboData.Greeting)
+>>>>>>> server
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
