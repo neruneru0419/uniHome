@@ -26,7 +26,9 @@ func main() {
 		var uniboData uniboLog.UniboData
 		m.Broadcast(msg)
 		json.Unmarshal(msg, &uniboData)
-		uniboLog.WriteLog(uniboData)
+		if uniboData.HeadSensor || uniboData.HumanSensor || uniboData.Greeting{
+			uniboLog.WriteLog(uniboData)
+		}
 		fmt.Println(uniboData.Words)
 	})
 
