@@ -35,7 +35,6 @@ class UniboWs:
             self.unibo_data["head_sensor"] = UniboSeiden.seiden()
             if self.unibo_data["head_sensor"]:
                 time.sleep(1)
-                self.unibo_data["head_sensor"] = False
     #人感センサーの処理
     #人を検知したらTrueを返す
     def unibo_humansensor(self):
@@ -43,7 +42,6 @@ class UniboWs:
             self.unibo_data["human_sensor"] = UniboHumanSensor.human_sensor()
             if self.unibo_data["human_sensor"]:
                 time.sleep(1)
-                self.unibo_data["human_sensor"] = False
     #あいさつの処理
     #おはよう、ただいま、おやすみのいずれかの挨拶を聞いたらTrueを返す
     def unibo_greeting(self):
@@ -51,12 +49,17 @@ class UniboWs:
             self.unibo_data["words"] , self.unibo_data["greeting"] = UniboMic.mic()
             if self.unibo_data["greeting"]:
                 time.sleep(1)
-                self.unibo_data["greeting"] = False
     #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
             result = json.dumps(self.unibo_data)
             self.ws.send(result)
+            if self.unibo_data["head_sensor"]:
+                self.unibo_data["head_sensor"] = False
+            elif self.unibo_data["human_sensor"]:
+                self.unibo_data["human_sensor"] = False
+            elif self.unibo_data["greeting"]:
+                self.unibo_data["greeting"] = False
             time.sleep(1)
         self.ws.close()
     #uniboやスマホからのデータ受信
