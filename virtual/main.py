@@ -13,7 +13,7 @@ start_time = time.time()
 
 class UniboData:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.5:8080/uniHome/ws")
+        self.ws = create_connection("ws://192.168.11.2:8080/uniHome/ws")
         with open("data/UniboVirtualData.json", "r") as f:
             self.unibo_data = json.load(f)
             self.action = self.unibo_data
@@ -49,8 +49,8 @@ class UniboData:
                 dance1 = "dance_parents_1.png"
                 dance2 = "dance_parents_2.png"
             elif user == "grand_parents":
-                dance1 = "dance_grand_parents1.png"
-                dance2 = "dance_grand_parents2.png"
+                dance1 = "dance_grand_parents_1.png"
+                dance2 = "dance_grand_parents_2.png"
 
             if time_cnt == 0:
                 self.image = pygame.image.load(
@@ -183,8 +183,8 @@ class UniboData:
                 self.image = pygame.transform.scale(
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x, self.y, self.w, self.h)
-                flg = True
-            elif time_cnt >= 400:
+                flg = False
+            elif time_cnt == 400:
                 self.image = pygame.image.load(
                     "img/face/" + light1).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (417, 490))
@@ -348,5 +348,5 @@ unibo_mic = Thread(target=ws.virtual_unibo_mic)
 wss.start()
 wsr.start()
 unibo_desktop.start()
-unibo_face_recognition.start()
+#unibo_face_recognition.start()
 unibo_mic.start()
