@@ -103,7 +103,9 @@ def loop_face(face, time_count):
                 GPIO.output(PIN_ANO[ano], parent_face[cat][ano]) # HIGH or LOW
             elif face == "grand_parents":
                 GPIO.output(PIN_ANO[ano], grandparent_face[cat][ano]) # HIGH or LOW
-        #time.sleep(0.0001) 
+        time.sleep(0.0001) 
         for ano in range(8):
             GPIO.output(PIN_ANO[ano], False) # LOWに戻す
         GPIO.output(PIN_CAT[cat], True) # HIGHに戻す
+
+
