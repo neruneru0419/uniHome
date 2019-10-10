@@ -230,6 +230,8 @@ class UniboData:
 
         def update(self, screen):
             self.y -= 10
+            if self.y == 0:
+                self.x = -1000
             self.rect = Rect(self.x, self.y, self.w, self.h)
 
     def desktop(self):
@@ -302,6 +304,8 @@ class UniboData:
     def virtual_unibo_face_recognition(self):
         while True:
             self.unibo_data["human_sensor"] = unibocv2.face_recognition()
+            if self.unibo_data["human_sensor"]:
+                time.sleep(60)
 
     def unibo_ws_send(self):
         while True:
@@ -313,7 +317,7 @@ class UniboData:
                 self.unibo_data["greeting"] = False
             if self.unibo_data["human_sensor"]:
                 self.unibo_data["human_sensor"] = False
-            time.sleep(1)
+            time.sleep(3)
         self.ws.close()
     # uniboやスマホからのデータ受信
 
@@ -348,5 +352,5 @@ unibo_mic = Thread(target=ws.virtual_unibo_mic)
 wss.start()
 wsr.start()
 unibo_desktop.start()
-#unibo_face_recognition.start()
+unibo_face_recognition.start()
 unibo_mic.start()
