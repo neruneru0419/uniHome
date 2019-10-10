@@ -24,7 +24,7 @@ class UniboWs:
                 start_time = time.time()
             else:
                 now_time = time.time()
-                if 3 <= now_time - start_time:
+                if 8 <= now_time - start_time:
                     self.facial_expression = "normal"
             self.time_count += 1
     #uniboやスマホからのデータ受信

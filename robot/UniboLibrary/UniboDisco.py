@@ -25,13 +25,17 @@ def dance():
     for i in range(8):
         right.ChangeDutyCycle(2.5)
         left.ChangeDutyCycle(4.875)
-        time.sleep(0.5)
+        time.sleep(0.3)
 
         right.ChangeDutyCycle(9.625)
         left.ChangeDutyCycle(12)
-        time.sleep(0.5)
-    right.ChangeDutyCycle(12)
-    time.sleep(0.5)
+        time.sleep(0.3)
+    right.ChangeDutyCycle(2.5)
+    time.sleep(1)
+def five_dance():
+    for i in range(5):
+        dance()
+
 def disco():
     thread_audio = threading.Thread(target=sound)
     thread_dance = threading.Thread(target=dance)

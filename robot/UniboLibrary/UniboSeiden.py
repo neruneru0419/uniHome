@@ -5,7 +5,7 @@ GPIO.setup(14, GPIO.IN)
 def seiden():
     i = 0
 
-    while i < 1.8:
+    while i < 1.0:
         if GPIO.input(14) != 0:
             i += 0.1
         else:
