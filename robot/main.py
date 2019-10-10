@@ -8,7 +8,8 @@ from UniboLibrary import *
 #Websocket通信のクラス
 class UniboWs:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.2:8080/uniHome/ws")
+        self.ws = create_connection("ws://192.168.11.3:8080/uniHome/ws")
+        UniboJulius.julius()
         with open("data/UniboRoboData.json", "r") as f:
             self.unibo_data = json.load(f)
         self.unibo_user = self.unibo_data["user"]
@@ -40,6 +41,7 @@ class UniboWs:
     def unibo_ws_send(self):
         while True:
             #print(5)
+            #if self.unibo_data["head_sensor"] or self.unibo_data["human_sensor"] or self.unibo_data["greeting"]:
             result = json.dumps(self.unibo_data)
             self.ws.send(result)
             if self.unibo_data["head_sensor"]:
@@ -53,10 +55,10 @@ class UniboWs:
     #uniboやスマホからのデータ受信
     def unibo_ws_recv(self):
         while True:
-            if self.result["head_sensor"] or self.result["human_sensor"] or self.result["greeting"]:
-                pass
-            else:
-                self.result = json.loads(self.ws.recv())
+            #if self.result["head_sensor"] or self.result["human_sensor"] or self.result["greeting"]:
+            #    pass
+            #else:
+            self.result = json.loads(self.ws.recv())
         self.ws.close()
     def unibo_dance(self):
         while True:
@@ -68,7 +70,7 @@ class UniboWs:
                     time.sleep(10)
                 #挨拶を聞いたら、挨拶のポーズを取る
                 elif self.result["greeting"]:
-                    UniboArm.greeting(result["words"])
+                    UniboArm.greeting(self.result["words"])
                     self.result["greeting"] = False
     def unibo_led(self):
         while True:

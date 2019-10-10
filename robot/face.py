@@ -8,7 +8,7 @@ from UniboLibrary import *
 #Websocket通信のクラス
 class UniboWs:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.2:8080/uniHome/ws")
+        self.ws = create_connection("ws://192.168.11.3:8080/uniHome/ws")
         with open("data/UniboRoboData.json", "r") as f:
             self.unibo_data = json.load(f)
         self.unibo_user = self.unibo_data["user"]
@@ -24,7 +24,7 @@ class UniboWs:
                 start_time = time.time()
             else:
                 now_time = time.time()
-                if 8 <= now_time - start_time:
+                if 7 <= now_time - start_time:
                     self.facial_expression = "normal"
             self.time_count += 1
     #uniboやスマホからのデータ受信

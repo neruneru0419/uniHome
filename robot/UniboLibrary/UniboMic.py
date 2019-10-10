@@ -14,8 +14,7 @@ def mic():
     sock.connect((host, port))
 
     data = ""
-    flg = True
-    while (flg):
+    while True:
 
         # "/RECOGOUT"を受信するまで、一回分の音声データを全部読み込む。
 
@@ -33,11 +32,9 @@ def mic():
                         strTemp = strTemp + line
 
             if strTemp != "":
-                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" strTemp == "ただいま"
-                sock.sendall(b'DIE')
+                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" or strTemp == "ただいま")
 
-                flg = False
-                # sys.exit()
+                break
             data = ""
 
     return strTemp, isGreeing
