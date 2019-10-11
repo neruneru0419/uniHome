@@ -1,27 +1,25 @@
 package com.example.mainscreen
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.speech.RecognizerIntent
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.mainscreen.R.layout.activity_main
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.speech.RecognizerIntent
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.widget.Button
-import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -98,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             // 音声認識を開始
             speech()
         }
-
+        //目のアニメーション
         eye_animation = Runnable {
             if(flag) {
                 normal_face.visibility = View.INVISIBLE
@@ -110,14 +108,14 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(eye_animation, 1000)
         }
-
+        //ハートが上にあがるアニメーション
         heart_animation = Runnable {
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
             unibo_button.visibility = View.INVISIBLE
             unibo_2.visibility = View.VISIBLE
             GlobalScope.launch(Dispatchers.Main) {
-                var job = launch {
+                val job = launch {
                     delay(800)
                 }
                 job.join()
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 unibo_button.visibility = View.VISIBLE
                 unibo_button.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.a2))
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    launch {
                         delay(1000)
                     job.join()
                         heart.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.a1))
@@ -137,14 +135,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        //吹き出しが上にあがるアニメーション
         puff_animation = Runnable {
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
             unibo_button.visibility = View.INVISIBLE
             unibo_2.visibility = View.VISIBLE
             GlobalScope.launch(Dispatchers.Main) {
-                var job = launch {
+                val job = launch {
                     delay(800)
                 }
                 job.join()
@@ -152,7 +150,7 @@ class MainActivity : AppCompatActivity() {
                 unibo_button.visibility = View.VISIBLE
                 unibo_button.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.a2))
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    val manifejob = launch {
                         delay(1000)
                     }
                     job.join()
@@ -164,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        //親　ダンスのアニメーション
         dance_animation_parents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -173,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                 dance1_1_parents.visibility = View.VISIBLE
                 dance2_2_parents.visibility = View.INVISIBLE
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    val job = launch {
                         delay(500)
                     }
                     job.join()
@@ -186,7 +184,7 @@ class MainActivity : AppCompatActivity() {
                 dance2_1_parents.visibility = View.VISIBLE
                 dance1_2_parents.visibility = View.INVISIBLE
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    val job = launch {
                         delay(500)
                     }
                     job.join()
@@ -197,7 +195,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(dance_animation_parents, 1000)
         }
-
+        //祖母　ダンスのアニメーション
         dance_animation_grandparents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -206,7 +204,7 @@ class MainActivity : AppCompatActivity() {
                 dance1_1_grandparents.visibility = View.VISIBLE
                 dance2_2_grandparents.visibility = View.INVISIBLE
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    val job = launch {
                         delay(500)
                     }
                     job.join()
@@ -219,7 +217,7 @@ class MainActivity : AppCompatActivity() {
                 dance2_1_grandparents.visibility = View.VISIBLE
                 dance1_2_grandparents.visibility = View.INVISIBLE
                 GlobalScope.launch(Dispatchers.Main) {
-                    var job = launch {
+                    val job = launch {
                         delay(500)
                     }
                     job.join()
@@ -230,7 +228,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(dance_animation_grandparents, 1000)
         }
-
+        //親　おはようのアニメーション
         greeting_animation1_parents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -247,7 +245,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation1_parents, 1000)
         }
-
+        //親　おやすみのアニメーション
         greeting_animation2_parents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -264,7 +262,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation2_parents, 1000)
         }
-
+        //親　おかえりのアニメーション
         greeting_animation3_parents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -281,7 +279,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation3_parents, 1000)
         }
-
+        //祖母　おはようのアニメーション
         greeting_animation1_grandparents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -298,7 +296,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation1_grandparents, 1000)
         }
-
+        //祖母　お休みのアニメーション
         greeting_animation2_grandparents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -315,7 +313,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation2_grandparents, 1000)
         }
-
+        //祖母　おかえりのアニメーション
         greeting_animation3_grandparents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -332,7 +330,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(greeting_animation3_grandparents, 1000)
         }
-
+        //親　通知のアニメーション
         notification_parents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -350,7 +348,7 @@ class MainActivity : AppCompatActivity() {
             }
             handler.postDelayed(notification_parents, 1000)
         }
-
+        //祖母　通知のアニメーション
         notification_grandparents = Runnable{
             handler.removeCallbacks(eye_animation)
             normal_face.visibility = View.INVISIBLE
@@ -371,6 +369,7 @@ class MainActivity : AppCompatActivity() {
 
         handler.post(eye_animation)
 
+        //ゆにぼが押されたら
         unibo_button.setOnClickListener {
             mic_button.isClickable = false
             unibo_button.isClickable = false
@@ -378,6 +377,7 @@ class MainActivity : AppCompatActivity() {
             handler.postDelayed(heart_animation,1000)
         }
 
+        //りれきボタンが押されたら
         timeline_button.setOnClickListener{
             handler.removeCallbacks(eye_animation)
             mic_button.isClickable = true
@@ -462,12 +462,15 @@ class MainActivity : AppCompatActivity() {
 
             if (candidates.size > 0) {
                 if (candidates[0] == "おはよう") {
+                    //音声認識の一番有力なものが”おはよう”であれば
                     handler.postDelayed(puff_animation, 1000)
                 }
                 if (candidates[0] == "おかえり" || candidates[0] == "ただいま") {
+                    //音声認識の一番有力なものが”おかえり, ただいま”であれば
                     handler.postDelayed(puff_animation, 1000)
                 }
                 if(candidates[0] == "おやすみ"){
+                    //音声認識の一番有力なものが”おやすみ”であれば
                     handler.postDelayed(puff_animation, 1000)
                 }
             }
