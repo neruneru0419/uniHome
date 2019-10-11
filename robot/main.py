@@ -15,7 +15,7 @@ class UniboWs:
         self.unibo_user = self.unibo_data["user"]
         self.facial_expression = "normal"#表情の設定
         self.time_count = 0
-        self.result = self.unibo_data
+        self.result = self.unibo_data.copy()
     #頭の静電容量センサーの処理
     #頭を触ったらTrue、触ってないならFalseを返す 
     def unibo_headsensor(self):

@@ -5,7 +5,7 @@ import subprocess
 def sound():
     GPIO.setmode(GPIO.BCM)
 
-    CMD = "aplay /home/pi/hello-Pi/トーマス.wav"
+    CMD = "aplay ./8bit8000.wav"
     try:
         subprocess.call(CMD, shell=True)
 
