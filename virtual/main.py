@@ -13,7 +13,9 @@ start_time = time.time()
 
 class UniboData:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.5:8080/uniHome/ws")
+        self.ws = create_connection("ws://192.168.11.40:8080/uniHome/ws")
+        unibojulius.julius()
+        time.sleep(1)
         with open("data/UniboVirtualData.json", "r") as f:
             self.unibo_data = json.load(f)
             self.action = self.unibo_data
@@ -41,6 +43,7 @@ class UniboData:
                 self.image = pygame.transform.scale(self.image, (417, 490))
 
         def unibo_danceing(self, time_cnt, user):
+            print(time_cnt)
             flg = False
             if user == "child":
                 dance1 = "dance_child_1.png"
@@ -49,10 +52,10 @@ class UniboData:
                 dance1 = "dance_parents_1.png"
                 dance2 = "dance_parents_2.png"
             elif user == "grand_parents":
-                dance1 = "dance_grand_parents1.png"
-                dance2 = "dance_grand_parents2.png"
+                dance1 = "dance_grand_parents_1.png"
+                dance2 = "dance_grand_parents_2.png"
 
-            if time_cnt == 0:
+            if time_cnt == 1:
                 self.image = pygame.image.load(
                     "img/dance/" + dance1).convert_alpha()
                 dance_w = self.image.get_width()
@@ -61,7 +64,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt == 25:
+            elif time_cnt == 41:
                 self.image = pygame.image.load(
                     "img/dance/" + dance2).convert_alpha()
                 dance_w = self.image.get_width()
@@ -70,7 +73,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt == 50:
+            elif time_cnt == 81:
                 self.image = pygame.image.load(
                     "img/dance/" + dance1).convert_alpha()
                 dance_w = self.image.get_width()
@@ -80,7 +83,7 @@ class UniboData:
                 self.image = pygame.transform.flip(self.image, True, False)
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt == 75:
+            elif time_cnt == 121:
                 self.image = pygame.image.load(
                     "img/dance/" + dance2).convert_alpha()
                 dance_w = self.image.get_width()
@@ -90,7 +93,7 @@ class UniboData:
                 self.image = pygame.transform.flip(self.image, True, False)
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt >= 100:
+            elif time_cnt == 161:
                 self.image = pygame.image.load(
                     "img/face/unibo_face_1.png").convert_alpha()
                 self.image = pygame.transform.scale(self.image, (417, 490))
@@ -121,7 +124,7 @@ class UniboData:
                 elif user == "grand_parents":
                     greeting = "welcomehome_grand_parents.png"
 
-            if time_cnt == 0:
+            if time_cnt == 1:
                 self.image = pygame.image.load(
                     "img/pause/" + greeting).convert_alpha()
                 dance_w = self.image.get_width()
@@ -130,7 +133,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt == 100:
+            elif time_cnt == 101:
                 self.image = pygame.image.load(
                     "img/pause/" + greeting).convert_alpha()
                 dance_w = self.image.get_width()
@@ -139,7 +142,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.45)))
                 self.rect = Rect(self.x - 60, self.y + 50, self.w, self.h)
                 flg = False
-            elif time_cnt == 200:
+            elif time_cnt == 201:
                 self.image = pygame.image.load(
                     "img/pause/" + greeting).convert_alpha()
                 dance_w = self.image.get_width()
@@ -148,7 +151,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x - 60, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt >= 300:
+            elif time_cnt >= 301:
                 self.image = pygame.image.load(
                     "img/face/unibo_face_1.png").convert_alpha()
                 self.image = pygame.transform.scale(self.image, (417, 490))
@@ -166,7 +169,7 @@ class UniboData:
             elif user == "grand_parents":
                 light1 = "unibo_grand_parents_face.png"
                 light2 = "unibo_light_grand_parents_face.png"
-            if time_cnt == 0 or time_cnt == 200:
+            if time_cnt == 1 or time_cnt == 201:
                 self.image = pygame.image.load(
                     "img/face/" + light1).convert_alpha()
                 dance_w = self.image.get_width()
@@ -175,7 +178,7 @@ class UniboData:
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x, self.y, self.w, self.h)
                 flg = False
-            elif time_cnt == 100 or time_cnt == 300:
+            elif time_cnt == 101 or time_cnt == 301:
                 self.image = pygame.image.load(
                     "img/face/" + light2).convert_alpha()
                 dance_w = self.image.get_width()
@@ -183,8 +186,8 @@ class UniboData:
                 self.image = pygame.transform.scale(
                     self.image, (int(dance_w * 0.5), int(dance_h * 0.5)))
                 self.rect = Rect(self.x, self.y, self.w, self.h)
-                flg = True
-            elif time_cnt >= 400:
+                flg = False
+            elif time_cnt == 401:
                 self.image = pygame.image.load(
                     "img/face/" + light1).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (417, 490))
@@ -230,6 +233,8 @@ class UniboData:
 
         def update(self, screen):
             self.y -= 10
+            if self.y == 0:
+                self.x = -1000
             self.rect = Rect(self.x, self.y, self.w, self.h)
 
     def desktop(self):
@@ -266,8 +271,7 @@ class UniboData:
                 self.unibo_data["head_sensor"] = True
                 self.unibo_hurt.put_emotion("img/hurt.png")
                 mouse_move = 0
-            time_cnt += 1
-
+            
             if self.unibo_body.isAnime:
                 time_cnt = 0
                 self.unibo_body.unibo_animation(now_time % 2)
@@ -281,7 +285,7 @@ class UniboData:
                 elif self.action["greeting"]:
                     self.unibo_body.isAnime = self.unibo_body.unibo_posing(
                         time_cnt, self.action["user"], self.action["words"])
-
+            time_cnt += 1
             group.update(screen)
             group.draw(screen)
             # 画面更新
@@ -297,11 +301,21 @@ class UniboData:
 
     def virtual_unibo_mic(self):
         while True:
-            self.unibo_data["greeting"] = unibomic.mic()
+            try:
+                self.unibo_data["words"], self.unibo_data["greeting"] = unibomic.mic()
+                print(self.unibo_data["words"], self.unibo_data["greeting"])
+            except ConnectionResetError:
+                print("にぎりつぶした")
+                unibojulius.julius()
+                time.sleep(1)
+                self.unibo_data["words"], self.unibo_data["greeting"] = unibomic.mic()
+            
 
     def virtual_unibo_face_recognition(self):
         while True:
             self.unibo_data["human_sensor"] = unibocv2.face_recognition()
+            if self.unibo_data["human_sensor"]:
+                time.sleep(60)
 
     def unibo_ws_send(self):
         while True:
