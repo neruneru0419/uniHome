@@ -15,6 +15,7 @@ type UniboData struct {
 	HeadSensor  bool   `json:"head_sensor"`
 	Greeting    bool   `json:"greeting"`
 	Words       string `json:"words"`
+	IsLog       bool   `json:"isLog"`
 }
 func getTime() string {
 	t := time.Now()
