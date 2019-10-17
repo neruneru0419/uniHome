@@ -5,10 +5,10 @@ GPIO.setup(14, GPIO.IN)
 def seiden():
     i = 0
 
-    while i < 1.8:
-        if GPIO.input(14) != 0:
+    while i < 1.5:
+        if GPIO.input(14):
             i += 0.1
         else:
-            return False
+            break
         time.sleep(0.1)
-    return True
+    return bool(i >= 1.5)

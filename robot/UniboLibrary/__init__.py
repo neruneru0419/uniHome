@@ -5,3 +5,4 @@ from . import UniboFace
 from . import UniboHumanSensor
 from . import UniboMic
 from . import UniboArm
+from . import UniboJulius
