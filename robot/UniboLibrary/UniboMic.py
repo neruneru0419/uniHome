@@ -4,8 +4,6 @@ import time
 
 
 def mic():
-    subprocess.Popen('julius -C ~/julius/julius-kit/dictation-kit-v4.4/am-gmm.jconf -nostrip -gram ~/julius/dict/hello -input mic -module', shell=True)
-    time.sleep(1)
     host = 'localhost'   # Raspberry PiのIPアドレス
     port = 10500         # juliusの待ち受けポート
 
@@ -32,11 +30,10 @@ def mic():
                         strTemp = strTemp + line
 
             if strTemp != "":
-                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" or strTemp == "ただいま")
+                strTemp = strTemp[0:4]
+                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" or strTemp == "ただいま" or strTemp == "おやすみ")
 
                 break
             data = ""
 
     return strTemp, isGreeing
-
-

@@ -5,7 +5,7 @@ import subprocess
 def sound():
     GPIO.setmode(GPIO.BCM)
 
-    CMD = "aplay ./8bit8000.wav"
+    CMD = "aplay UniboLibrary/8bit8000.wav"
     try:
         subprocess.call(CMD, shell=True)
 
@@ -25,16 +25,13 @@ def dance():
     for i in range(8):
         right.ChangeDutyCycle(2.5)
         left.ChangeDutyCycle(4.875)
-        time.sleep(0.3)
+        time.sleep(0.5)
 
         right.ChangeDutyCycle(9.625)
         left.ChangeDutyCycle(12)
-        time.sleep(0.3)
+        time.sleep(0.5)
     right.ChangeDutyCycle(2.5)
     time.sleep(1)
-def five_dance():
-    for i in range(5):
-        dance()
 
 def disco():
     thread_audio = threading.Thread(target=sound)
@@ -42,4 +39,3 @@ def disco():
 
     thread_audio.start()
     thread_dance.start()
-
