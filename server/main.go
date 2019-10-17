@@ -46,6 +46,3 @@ func main() {
 		router.Run(":8080")
 
 		fmt.Println("uniHome Server End.")
-}
-	
-	
