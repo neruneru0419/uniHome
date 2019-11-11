@@ -31,12 +31,13 @@ class UniboWs:
     def unibo_ws_recv(self):
         while True:
             #print(6)
-            result = json.loads(self.ws.recv())
-            print(result)
+            recv_data = json.loads(self.ws.recv())
+            print(recv_data)
             print(self.unibo_user)
-            if result["head_sensor"] or result["human_sensor"] or result["greeting"]:
-                if result["user"] != self.unibo_user:
-                    self.facial_expression = result["user"]
+            if recv_data["head_sensor"] or recv_data["human_sensor"] or recv_data["greeting"]:
+                if recv_data["user"] != self.unibo_user:
+                    self.facial_expression = recv_data["user"]
+                    recv_data["user"] = self.unibo_user
             
         self.ws.close()
 
