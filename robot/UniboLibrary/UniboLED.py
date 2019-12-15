@@ -35,3 +35,5 @@ def led_fade():
         GPIO.output(rPin, GPIO.HIGH)
         GPIO.output(gPin, GPIO.HIGH)
         GPIO.cleanup()
+if __name__ == "__main__":
+    led_fade()

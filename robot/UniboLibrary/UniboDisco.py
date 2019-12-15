@@ -22,7 +22,7 @@ def dance():
     left = GPIO.PWM(23, 50)
     left.start(0)
 
-    for i in range(8):
+    for i in range(3):
         right.ChangeDutyCycle(2.5)
         left.ChangeDutyCycle(4.875)
         time.sleep(0.5)
@@ -39,3 +39,4 @@ def disco():
 
     thread_audio.start()
     thread_dance.start()
+

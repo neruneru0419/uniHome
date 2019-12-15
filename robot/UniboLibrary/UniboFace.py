@@ -108,4 +108,3 @@ def loop_face(face, time_count):
             GPIO.output(PIN_ANO[ano], False) # LOWに戻す
         GPIO.output(PIN_CAT[cat], True) # HIGHに戻す
 
-

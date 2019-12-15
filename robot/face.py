@@ -8,10 +8,10 @@ from UniboLibrary import *
 #Websocket通信のクラス
 class UniboWs:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.3:8080/uniHome/ws")
+        self.ws = create_connection("ws://192.168.11.40:8080/uniHome/ws")
         with open("data/UniboRoboData.json", "r") as f:
             self.unibo_data = json.load(f)
-        self.unibo_user = self.unibo_data["user"]
+        self.unibo_user = "child"#self.unibo_data["user"]
         self.facial_expression = "normal"#表情の設定
         self.time_count = 0
     #表情のループ処理
@@ -31,13 +31,12 @@ class UniboWs:
     def unibo_ws_recv(self):
         while True:
             #print(6)
-            recv_data = json.loads(self.ws.recv())
-            print(recv_data)
+            result = json.loads(self.ws.recv())
+            print(result)
             print(self.unibo_user)
-            if recv_data["head_sensor"] or recv_data["human_sensor"] or recv_data["greeting"]:
-                if recv_data["user"] != self.unibo_user:
-                    self.facial_expression = recv_data["user"]
-                    recv_data["user"] = self.unibo_user
+            if result["head_sensor"] or result["human_sensor"] or result["greeting"]:
+                if result["user"] != self.unibo_user:
+                    self.facial_expression = result["user"]
             
         self.ws.close()
 

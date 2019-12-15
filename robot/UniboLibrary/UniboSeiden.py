@@ -12,3 +12,10 @@ def seiden():
             break
         time.sleep(0.1)
     return bool(i >= 1.5)
+
+def test_seiden():
+    while True:
+        print(GPIO.input(14))
+
+if __name__ == "__main__":
+    test_seiden()

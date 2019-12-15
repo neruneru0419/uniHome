@@ -31,9 +31,11 @@ def mic():
 
             if strTemp != "":
                 strTemp = strTemp[0:4]
-                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" or strTemp == "ただいま" or strTemp == "おやすみ")
+                isGreeing = (strTemp == "おはよう" or strTemp == "おやすみ" or strTemp == "ただいま")
 
                 break
             data = ""
 
     return strTemp, isGreeing
+
+

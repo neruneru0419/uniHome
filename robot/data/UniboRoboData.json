@@ -1,6 +1,6 @@
 {
     "type" : "robot",
-    "user" : "grand_parents",
+    "user" : "child",
     "human_sensor" : false,
     "head_sensor" : false,
     "greeting" : false,
