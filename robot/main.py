@@ -1,100 +1,165 @@
 import RPi.GPIO as GPIO
 import time
 import json
+import sys
 from websocket import create_connection
-from threading import Thread
+from threading import Event, Thread
 from UniboLibrary import *
-
+send_event, recv_event = Event(), Event()
 #Websocket通信のクラス
 class UniboWs:
     def __init__(self):
-        self.ws = create_connection("ws://192.168.11.3:8080/uniHome/ws")
+        #self.ws = create_connection("ws://192.168.11.40:8080/uniHome/ws")
+        self.ws = create_connection("wss://neruneru.higashi.dev/uniHome/ws")
         UniboJulius.julius()
         with open("data/UniboRoboData.json", "r") as f:
-            self.unibo_data = json.load(f)
-        self.unibo_user = self.unibo_data["user"]
-        self.facial_expression = "normal"#表情の設定
-        self.time_count = 0
-        self.result = self.unibo_data.copy()
+            self.send_data = json.load(f)
+        #if sys.argv[1] == "1":
+        self.send_data["user"] = "parents"
+        #elif sys.argv[1] == "2":
+        #    self.send_data["user"] = "parents"
+        #elif sys.argv[1] == "3":
+        #    self.send_data["user"] = "grand_parents"
+
+        self.unibo_user = self.send_data["user"]
+        self.recv_data = self.send_data.copy()
+        self.INIT_RECV_DATA = self.send_data
+        self.isHumanSensor = False
+        time.sleep(1)
     #頭の静電容量センサーの処理
     #頭を触ったらTrue、触ってないならFalseを返す 
     def unibo_headsensor(self):
         while True:
-            #print(2)
-            if (not self.unibo_data["head_sensor"]):
-                self.unibo_data["head_sensor"] = UniboSeiden.seiden()
+            self.send_data["head_sensor"] = UniboSeiden.seiden()
+            #print("1")
+            send_event.wait()
+            send_event.clear()
     #人感センサーの処理
     #人を検知したらTrueを返す
     def unibo_humansensor(self):
         while True:
-            #print(3)
-            if (not self.unibo_data["human_sensor"]):
-                self.unibo_data["human_sensor"] = UniboHumanSensor.human_sensor()
+            self.send_data["human_sensor"] = UniboHumanSensor.human_sensor()
+            print("2")
+            send_event.wait()
+            send_event.clear()
+            if self.isHumanSensor:
+                time.sleep(10)
+                self.isHumanSensor = False
     #あいさつの処理
-    #おはよう、ただいま、おやすみのいずれかの挨拶を聞いたらTrueを返す
+    #おはよう、ただいま、おやすみ、おかえりのいずれかの挨拶を聞いたらTrueを返す
     def unibo_greeting(self):
         while True:
             #print(4)
-            if(not self.unibo_data["greeting"]):
-                self.unibo_data["words"] , self.unibo_data["greeting"] = UniboMic.mic()
+            try:
+                print("3")
+                if (not self.send_data["greeting"]):
+                    self.send_data["words"] , self.send_data["greeting"] = UniboMic.mic()
+                    send_event.wait()
+                    send_event.clear()
+                    #print(self.send_data["words"], self.send_data["greeting"])
+            except ConnectionResetError:
+                print("にぎりつぶした")
+                UniboJulius.julius()
+                time.sleep(1)
+                self.send_data["words"], self.send_data["greeting"] = UniboMic.mic()
+    #転んでいるかの検知
+    def unibo_is_fall(self):
+        while True:
+            self.send_data["isFall"] = False#UniboFall.isfall()
+            if self.send_data["isFall"]:
+                cnt = 0
+                danger = True
+                while cnt <= 600:
+                    cnt += 1
+                    if self.send_data["head_sensor"]:
+                        danger = False
+                self.send_data["isFall"] = danger
+            send_event.wait()
+            send_event.clear()
     #uniboからのデータ送信
     def unibo_ws_send(self):
         while True:
-            #print(5)
-            #if self.unibo_data["head_sensor"] or self.unibo_data["human_sensor"] or self.unibo_data["greeting"]:
-            result = json.dumps(self.unibo_data)
-            self.ws.send(result)
-            if self.unibo_data["head_sensor"]:
-                self.unibo_data["head_sensor"] = False
-            elif self.unibo_data["human_sensor"]:
-                self.unibo_data["human_sensor"] = False
-            elif self.unibo_data["greeting"]:
-                self.unibo_data["greeting"] = False
-            time.sleep(1)
+            if self.send_data["head_sensor"] or self.send_data["human_sensor"] or self.send_data["greeting"]:
+                str_send_data = json.dumps(self.send_data)
+                print(self.send_data)
+                self.ws.send(str_send_data)
+                if self.send_data["head_sensor"]:
+                    self.send_data["head_sensor"] = False
+                elif self.send_data["human_sensor"]:
+                    self.send_data["human_sensor"] = False
+                    self.isHumanSensor = True
+                elif self.send_data["greeting"]:
+                    self.send_data["greeting"] = False
+                    self.send_data["words"] = ""
+                send_event.set()
+                print("送信した")
+                #time.sleep(1)
+            else:
+                send_event.set()
         self.ws.close()
-    #uniboやスマホからのデータ受信
     def unibo_ws_recv(self):
         while True:
-            #if self.result["head_sensor"] or self.result["human_sensor"] or self.result["greeting"]:
-            #    pass
-            #else:
-            self.result = json.loads(self.ws.recv())
+            self.recv_data = json.loads(self.ws.recv())
+            if (self.recv_data["user"] != self.unibo_user) and (not self.recv_data["isLog"]):
+                if self.recv_data["head_sensor"] or self.recv_data["human_sensor"] or self.recv_data["greeting"]:
+                    #print(self.recv_data)
+                    recv_event.wait()#ゆにぼのアクションが終わるまで待つ
+                    self.recv_data = self.INIT_RECV_DATA
+                    recv_event.clear()
         self.ws.close()
     def unibo_dance(self):
+        self.can_dance = False
         while True:
-            if self.result["user"] != self.unibo_user:
-                #静電容量センサーが触られたら、音楽を流しながら踊る
-                if self.result["head_sensor"]:
-                    UniboDisco.disco()
-                    self.result["head_sensor"] = False
-                    time.sleep(10)
+            if (self.recv_data["user"] != self.unibo_user) and (not self.recv_data["isLog"]):            
+                if self.recv_data["head_sensor"]:
+                    UniboDisco.dance()
                 #挨拶を聞いたら、挨拶のポーズを取る
-                elif self.result["greeting"]:
-                    UniboArm.greeting(self.result["words"])
-                    self.result["greeting"] = False
+                if self.recv_data["greeting"]:
+                    UniboArm.greeting(self.recv_data["words"])
+                self.can_dance = True
+                recv_event.wait()
+                recv_event.clear()
+                
     def unibo_led(self):
+        self.can_led = False
         while True:
-            if self.result["user"] != self.unibo_user:
-                if self.result["human_sensor"]:
+            if (self.recv_data["user"] != self.unibo_user) and (not self.recv_data["isLog"]):            
+                if self.recv_data["human_sensor"]:
                     UniboLED.led_fade()
-                    self.result["human_sensor"] = False
+                if self.recv_data["isFall"]:
+                    UniboLED.danger()
+                self.can_led = True
+                recv_event.wait()#他のアクションが終わるまで待つ
+                recv_event.clear()
+    def all_recv_event_set(self):
+        while True:
+            if self.can_dance and self.can_led:
+                self.can_dance = False
+                self.can_led = False
+                self.recv_data = self.INIT_RECV_DATA
+                recv_event.set()
             
-
-if __name__ == "__main__":
+def main():
     ws = UniboWs()
 
     unibo_wss = Thread(target=ws.unibo_ws_send)
     unibo_wsr = Thread(target=ws.unibo_ws_recv)
     head_sensor = Thread(target=ws.unibo_headsensor)
     human_sensor = Thread(target=ws.unibo_humansensor)
-    mic = Thread(target=ws.unibo_greeting)
+    greeting = Thread(target=ws.unibo_greeting)
+    #fall = Thread(target=ws.unibo_is_fall)
     dance = Thread(target=ws.unibo_dance)
     led = Thread(target=ws.unibo_led)
+    recv_set = Thread(target=ws.all_recv_event_set)
 
     unibo_wss.start()
     unibo_wsr.start()
     head_sensor.start()
     human_sensor.start()
-    mic.start()
+    greeting.start()
+    #fall.start()
     dance.start()
     led.start()
+    recv_set.start()
+if __name__ == "__main__":
+    main()

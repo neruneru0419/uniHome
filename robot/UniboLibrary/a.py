@@ -110,5 +110,5 @@ def loop_face(face, time_count):
 if __name__ == "__main__":
     i = 0
     while True:
-        loop_face("grand_parents", i)
+        loop_face("normal", i)
         i += 1

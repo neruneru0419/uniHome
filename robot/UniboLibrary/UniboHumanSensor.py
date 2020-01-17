@@ -9,3 +9,6 @@ def human_sensor():
     except(KeyboardInterrupt):
         print("interrupt")
     GPIO.cleanup()
+if __name__ == "__main__":
+    while True:
+        print(human_sensor())

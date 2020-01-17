@@ -1,17 +1,20 @@
 import RPi.GPIO as GPIO
 import time
 import threading
+"""
 import subprocess
 def sound():
     GPIO.setmode(GPIO.BCM)
 
-    CMD = "aplay ./8bit8000.wav"
+    CMD = "aplay UniboLibrary/8bit8000.wav"
     try:
         subprocess.call(CMD, shell=True)
 
     except KeyboardInterrupt:
         pass
+"""
 def dance():
+    time.sleep(1)
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(24, GPIO.OUT)
@@ -22,14 +25,14 @@ def dance():
     left = GPIO.PWM(23, 50)
     left.start(0)
 
-    for i in range(8):
+    for i in range(3):
         right.ChangeDutyCycle(2.5)
         left.ChangeDutyCycle(4.875)
-        time.sleep(0.3)
+        time.sleep(0.5)
 
         right.ChangeDutyCycle(9.625)
         left.ChangeDutyCycle(12)
-        time.sleep(0.3)
+        time.sleep(0.5)
     right.ChangeDutyCycle(2.5)
     time.sleep(1)
 def five_dance():
@@ -42,4 +45,6 @@ def disco():
 
     thread_audio.start()
     thread_dance.start()
-
+if __name__ == "__main__":
+    dance()
+    GPIO.cleanup()
