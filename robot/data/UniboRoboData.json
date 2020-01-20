@@ -5,5 +5,6 @@
     "head_sensor" : false,
     "greeting" : false,
     "words" : "",
-    "isLog" : false
+    "isLog" : false,
+    "isFall" : false
 }
