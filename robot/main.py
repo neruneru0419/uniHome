@@ -126,8 +126,8 @@ class UniboWs:
             if (self.recv_data["user"] != self.unibo_user) and (not self.recv_data["isLog"]):            
                 if self.recv_data["human_sensor"]:
                     UniboLED.led_fade()
-                if self.recv_data["isFall"]:
-                    UniboLED.danger()
+                #if self.recv_data["isFall"]:
+                #    UniboLED.danger()
                 self.can_led = True
                 recv_event.wait()#他のアクションが終わるまで待つ
                 recv_event.clear()
