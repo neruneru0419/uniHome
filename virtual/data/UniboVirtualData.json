@@ -1,9 +1,0 @@
-{
-    "type": "virtual",
-    "user": "child",
-    "human_sensor": false,
-    "head_sensor": false,
-    "greeting": false,
-    "words": "",
-    "isLog": false
-}
