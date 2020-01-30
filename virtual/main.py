@@ -305,7 +305,6 @@ class UniboData:
                 self.unibo_data["words"], self.unibo_data["greeting"] = unibomic.mic()
                 print(self.unibo_data["words"], self.unibo_data["greeting"])
             except ConnectionResetError:
-                print("にぎりつぶした")
                 unibojulius.julius()
                 time.sleep(1)
                 self.unibo_data["words"], self.unibo_data["greeting"] = unibomic.mic()
